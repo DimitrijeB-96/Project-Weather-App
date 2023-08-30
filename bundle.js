@@ -1,0 +1,1 @@
+(()=>{"use strict";new class{constructor(s,t){this.model=s,this.view=t}}(new class{constructor(){}},new class{constructor(){}}),console.log("test")})();
