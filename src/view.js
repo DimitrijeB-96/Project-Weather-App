@@ -2,6 +2,7 @@ export class View {
   constructor() {
     this.container = this.createElement('div', 'container');
 
+    // SUBMIT ON ENTER CLICK ?
     this.input = this.createElement('input');
 
     this.searchBtn = this.createElement('button');
