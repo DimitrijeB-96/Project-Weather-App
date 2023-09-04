@@ -80,6 +80,10 @@ export class View {
     div.append(day, weatherIcon, maxTemperature, minTemperature);
   }
 
+  getBackground() {
+    
+  }
+
   handleInput(handler) {
     this.searchBtn.addEventListener('click', () => {
       handler(this.input.value);
