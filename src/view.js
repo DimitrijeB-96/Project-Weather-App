@@ -12,18 +12,21 @@ export class View {
 
 
     // SUBMIT ON ENTER CLICK ? SHOULD THIS BE IN THE FORM ?
-    this.input = this.createElement('input');
+    this.input = this.createElement('input', 'search-input');
+    this.input.type = 'text';
+
     this.searchBtn = this.createElement('button');
     this.searchBtn.textContent = 'Search';
 
-    //this.toggleSection.append();
+    this.toggleInput = this.createElement('input');
+    this.toggleInput.type = 'checkbox';
+
+    this.toggleSection.append(this.toggleInput);
     this.searchSection.append(this.input, this.searchBtn);
     //this.advanceSection.append();
 
     //this.leftSection.append();
     this.centralSection.append(this.toggleSection, this.searchSection, this.advanceSection);
-
-    this.todayWeatherCard();
 
     this.topContainer.append(this.leftSection, this.centralSection);
     //this.bottomContainer.append();
@@ -42,6 +45,10 @@ export class View {
 
   //This should get handler to accept default data from Model Class
   todayWeatherCard(city, country, temp, wText, dateTime) {
+    while (this.leftSection.firstChild) {
+      this.leftSection.removeChild(this.leftSection.firstChild);
+    }
+    
     const div = this.createElement('div', 'today-card');
     
     const cityName = this.createElement('h2', 'city-name');
@@ -53,8 +60,8 @@ export class View {
     const temperature = this.createElement('h2', 'temperature');
     temperature.textContent = temp;
 
-    const weatherIcon = this.createElement('span', 'today-weather-icon');
-    //weatherIcon.textContent = wIcon;
+    const weatherIcon = this.createElement('span');
+    weatherIcon.classList.add('sunny');
 
     const weatherText = this.createElement('p', 'weather-text');
     weatherText.textContent = wText;

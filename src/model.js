@@ -85,7 +85,7 @@ export class Model {
       const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=757ce984dbc947619fd83911232708&q=${location}`, { mode: 'cors'});
       const data = await response.json();
 
-      return data;
+      return { data };
     } catch (error) {
       console.log(error);
     }

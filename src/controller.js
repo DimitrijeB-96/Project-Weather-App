@@ -3,22 +3,40 @@ export class Controller {
     this.model = model;
     this.view = view;
 
-    //this.view.handleInput(this.handleSeachLocation);
     this.handleTodayCard();
+    this.view.handleInput(this.handleTodayInput);
   }
 
-  // handleSeachLocation = (location) => {
-  //   this.model.getLocation(location);  
-  // }
+  handleTodayCard = async () => {
+    const data = await this.model.defaultLocation();
 
-  handleTodayCard = () => {
-    this.model.defaultLocation()
-      .then((data) => {
-        const getDataLocation = data.data.location;
-        const getDataCurrent = data.data.current;
-        this.view.todayWeatherCard(getDataLocation.name, getDataLocation.country, getDataCurrent.temp_c, getDataCurrent.condition.text, getDataCurrent.last_updated);
-      })//.then((data) => {
-        //this.view.getBackground();
-      //})
+    if (data) {
+      const getDataLocation = data.data.location;
+      const getDataCurrent = data.data.current;
+      this.view.todayWeatherCard(
+        getDataLocation.name, 
+        getDataLocation.country, 
+        getDataCurrent.temp_c, 
+        getDataCurrent.condition.text, 
+        getDataCurrent.last_updated
+      );
+    }   
+  }
+
+  handleTodayInput = async (search) => {
+    const data = await this.model.getLocation(search);
+
+    console.log(data);
+    if (data) {
+      const getDataLocation = data.data.location;
+      const getDataCurrent = data.data.current;
+      this.view.todayWeatherCard(
+        getDataLocation.name, 
+        getDataLocation.country, 
+        getDataCurrent.temp_c, 
+        getDataCurrent.condition.text, 
+        getDataCurrent.last_updated
+      );
+    }
   }
 }
