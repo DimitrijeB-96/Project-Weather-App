@@ -6,6 +6,10 @@
 
 export class Model {
   constructor() {
+    // False represent Celsius, true represent Fahrenheit
+    this.isUnits = false;
+    this.currentCityName = 'Novi Sad';
+
     this.imageArray = [
       { id: 1, name: 'sunny' },
       { id: 2, name: 'partially-sunny' },
@@ -21,6 +25,18 @@ export class Model {
     ];
 
     this.addImagesToObj();
+  }
+
+  changeUnits() {
+    return this.isUnits = !this.isUnits;
+  }
+
+  getUnits() {
+    return this.isUnits;
+  }
+
+  getCityName() {
+    return this.currentCityName;
   }
 
   addImagesToObj() {
@@ -71,7 +87,7 @@ export class Model {
 
   async defaultLocation() {
     try {
-      const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=757ce984dbc947619fd83911232708&q=$Novi+Sad`, { mode: 'cors'});
+      const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}`, { mode: 'cors'});
       const data = await response.json();
       
       return { data };
@@ -84,6 +100,7 @@ export class Model {
     try {
       const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=757ce984dbc947619fd83911232708&q=${location}`, { mode: 'cors'});
       const data = await response.json();
+      this.currentCityName = location;
 
       return { data };
     } catch (error) {

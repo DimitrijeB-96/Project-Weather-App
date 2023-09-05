@@ -153,10 +153,6 @@ p, label {
   font-size: 5em;
 }
 
-.today-card h2:last-of-type::after {
-  content: '℃';
-}
-
 .today-card span {
   align-self: center;
   height: 160px;
@@ -193,7 +189,7 @@ p, label {
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 10px;
+  padding: 0 20px;
 
   border: 2px solid black;
 }
@@ -204,11 +200,22 @@ p, label {
   font-size: 3.5em;
 }
 
+.toggle-div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle-div p {
+  font-size: 2em;
+}
+
 .input-toggle {
   position: relative;
 
   height: 40px;
   width: 80px;
+  margin-left: 4px;
 
   border-radius: 20px;
   background: gray;

@@ -10,8 +10,16 @@ export class View {
     this.searchSection = this.createElement('div', 'search-section');
     this.advanceSection = this.createElement('div', 'advance-section');
 
+    this.toggleDiv = this.createElement('div', 'toggle-div');
+
     this.title = this.createElement('h1', 'title');
     this.title.textContent = 'Weather APP';
+
+    this.celsiousText = this.createElement('p');
+    this.celsiousText.textContent = '℃';
+
+    this.fahrenheitText = this.createElement('p');
+    this.fahrenheitText.textContent = '℉';
 
     this.toggleInput = this.createElement('input', 'input-toggle');
     this.toggleInput.type = 'checkbox';
@@ -25,7 +33,9 @@ export class View {
     this.input.type = 'text';
     this.input.placeholder = '';
 
-    this.toggleSection.append(this.title, this.toggleInput);
+    this.toggleDiv.append(this.celsiousText, this.toggleInput, this.fahrenheitText);
+
+    this.toggleSection.append(this.title, this.toggleDiv);
     this.searchSection.append(this.input, this.inputLabel);
     //this.advanceSection.append();
 
@@ -47,8 +57,7 @@ export class View {
     return element;
   }
 
-  //This should get handler to accept default data from Model Class
-  todayWeatherCard(city, country, temp, wText, dateTime) {
+  todayWeatherCard(city, country, temp, units, wText, dateTime) {
     while (this.leftSection.firstChild) {
       this.leftSection.removeChild(this.leftSection.firstChild);
     }
@@ -62,7 +71,11 @@ export class View {
     countryName.textContent = country;
 
     const temperature = this.createElement('h2', 'temperature');
-    temperature.textContent = temp;
+    if (units) {
+      temperature.textContent = `${temp} ℉`;
+    } else {
+      temperature.textContent = `${temp} ℃`;
+    }
 
     const weatherIcon = this.createElement('span');
     weatherIcon.classList.add('sunny');
@@ -75,7 +88,6 @@ export class View {
     
     div.append(cityName, countryName, temperature, weatherIcon, weatherText, dateAndTime);
     this.leftSection.append(div);
-    
   }
 
   // Hourly and future days ?
@@ -89,6 +101,12 @@ export class View {
     const minTemperature = this.createElement('h3', 'min-temperature');
 
     div.append(day, weatherIcon, maxTemperature, minTemperature);
+  }
+
+  handleToggle(handler) {
+    this.toggleInput.addEventListener('change', () => {
+      handler(this.toggleInput.checked);
+    });
   }
 
   getBackground() {
