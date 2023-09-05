@@ -10,19 +10,23 @@ export class View {
     this.searchSection = this.createElement('div', 'search-section');
     this.advanceSection = this.createElement('div', 'advance-section');
 
+    this.title = this.createElement('h1', 'title');
+    this.title.textContent = 'Weather APP';
 
-    // SUBMIT ON ENTER CLICK ? SHOULD THIS BE IN THE FORM ?
-    this.input = this.createElement('input', 'search-input');
-    this.input.type = 'text';
-
-    this.searchBtn = this.createElement('button');
-    this.searchBtn.textContent = 'Search';
-
-    this.toggleInput = this.createElement('input');
+    this.toggleInput = this.createElement('input', 'input-toggle');
     this.toggleInput.type = 'checkbox';
 
-    this.toggleSection.append(this.toggleInput);
-    this.searchSection.append(this.input, this.searchBtn);
+    this.inputLabel = this.createElement('label', 'input-label');
+    this.inputLabel.htmlFor = 'search-input';
+    this.inputLabel.textContent = 'Search';
+
+    this.input = this.createElement('input');
+    this.input.id = 'search-input';
+    this.input.type = 'text';
+    this.input.placeholder = '';
+
+    this.toggleSection.append(this.title, this.toggleInput);
+    this.searchSection.append(this.input, this.inputLabel);
     //this.advanceSection.append();
 
     //this.leftSection.append();
@@ -92,8 +96,10 @@ export class View {
   }
 
   handleInput(handler) {
-    this.searchBtn.addEventListener('click', () => {
-      handler(this.input.value);
+    this.input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        handler(this.input.value);
+      }
     })
   }
 }
