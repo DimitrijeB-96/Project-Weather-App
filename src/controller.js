@@ -28,11 +28,12 @@ export class Controller {
       if (currentCity === getDataLocation.name) {
         this.view.todayWeatherCard(
           currentCity,
-          getDataLocation.country, 
+          getDataLocation.country,
           temp,
           displayUnits,
           getDataCurrent.condition.text, 
-          getDataCurrent.last_updated
+          getDataCurrent.last_updated,
+          getDataCurrent.is_day
         );
       }
     }
@@ -57,11 +58,12 @@ export class Controller {
       
       this.view.todayWeatherCard(
         getDataLocation.name, 
-        getDataLocation.country, 
-        temp, 
+        getDataLocation.country,
+        temp,
         displayUnits,
         getDataCurrent.condition.text, 
-        getDataCurrent.last_updated
+        getDataCurrent.last_updated,
+        getDataCurrent.is_day
       );
     }
   }

@@ -35,9 +35,18 @@ export class View {
 
     this.toggleDiv.append(this.celsiousText, this.toggleInput, this.fahrenheitText);
 
+    // Min Temp, Max Temp;
+    this.minTempText = this.createElement('h3');
+    this.minTempText.textContent = 'Min Temp';
+    // Sunrise, Sunset;
+    // Humidity, Feels Like;
+    // Chance of Rain;
+    // Wind;
+    
+
     this.toggleSection.append(this.title, this.toggleDiv);
     this.searchSection.append(this.input, this.inputLabel);
-    //this.advanceSection.append();
+    this.advanceSection.append(this.minTempText);
 
     //this.leftSection.append();
     this.centralSection.append(this.toggleSection, this.searchSection, this.advanceSection);
@@ -57,10 +66,11 @@ export class View {
     return element;
   }
 
-  todayWeatherCard(city, country, temp, units, wText, dateTime) {
+  todayWeatherCard(city, country, temp, units, wText, dateTime, isDay) {
     while (this.leftSection.firstChild) {
       this.leftSection.removeChild(this.leftSection.firstChild);
     }
+    const icon = this.getIcon(wText, isDay);
     
     const div = this.createElement('div', 'today-card');
     
@@ -78,7 +88,7 @@ export class View {
     }
 
     const weatherIcon = this.createElement('span');
-    weatherIcon.classList.add('sunny');
+    weatherIcon.classList.add(icon);
 
     const weatherText = this.createElement('p', 'weather-text');
     weatherText.textContent = wText;
@@ -88,6 +98,49 @@ export class View {
     
     div.append(cityName, countryName, temperature, weatherIcon, weatherText, dateAndTime);
     this.leftSection.append(div);
+  }
+
+  getIcon(text, isDay) {
+    let icon;
+
+    if (text === 'Sunny') {
+      icon = 'sunny';
+    } else if (text === 'Clear') {
+      icon = 'night';
+    } else if (text === 'Partly cloudy' && isDay === 1) {
+      icon = 'partially-sunny';
+    } else if (text === 'Partly cloudy' && isDay === 0) {
+      icon = 'cloudy-night';
+    } else if (text === 'Overcast' || text === 'Cloudy') {
+      icon = 'overcast';
+    } else if (text === 'Mist' || text === 'Fog' || text === 'Freezing fog') {
+      icon = 'foggy';
+    } else if (text === 'Patchy rain possible' || text === 'Patchy light rain' || text === 'Light rain' ||
+      text === 'Light rain shower' || text === 'Light freezing rain') {
+      icon = 'rainy';
+    } else if (text === 'Moderate rain at times' || text === 'Moderate rain' || text === 'Heavy rain at times' || text === 'Heavy rain' ||
+      text === 'Moderate or heavy freezing rain' || text === 'Moderate or heavy rain shower' || text === 'Torrential rain shower') {
+      icon = 'heavy-rainy';
+    } else if (text === 'Patchy light drizzle' || text === 'Light drizzle') {
+      icon = 'drizzle';
+    } else if (text === 'Patchy sleet possible' || text === 'Light sleet' || text === 'Light sleet showers' ||text === 'Light showers of ice pellets') {
+      icon = 'sleet';
+    } else if (text === text === 'Moderate or heavy sleet' || text === 'Moderate or heavy sleet showers' || text === 'Ice pellets' || 
+      text === 'Moderate or heavy showers of ice pellets') {
+      icon = 'hail';
+    } else if (text === 'Patchy freezing drizzle possible' || text === 'Freezing drizzle' || text === 'Heavy freezing drizzle' || text === 'Heavy snow') {
+      icon = 'freezing';
+    } else if (text === 'Patchy snow possible' || text === 'Blowing snow' || text === 'Blizzard' || text === 'Patchy light snow' ||
+      text === 'Light snow' || text === 'Patchy moderate snow' || text === 'Light snow showers' || text === 'Moderate or heavy snow showers') {
+      icon = 'snow';
+    } else if (text === 'Thundery outbreaks possible') {
+      icon = 'thunder';
+    } else if (text === 'Patchy light rain with thunder' || text === 'Moderate or heavy rain with thunder' || text === 'Patchy light snow with thunder' ||
+      text === 'Moderate or heavy snow with thunder') {
+      icon = 'thunder-rain';
+    }
+
+    return icon;
   }
 
   // Hourly and future days ?
