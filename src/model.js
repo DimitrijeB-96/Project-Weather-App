@@ -87,7 +87,7 @@ export class Model {
 
   async defaultLocation() {
     try {
-      const forecast = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}&days=3`, { mode: 'cors'});
+      const forecast = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}&days=7`, { mode: 'cors'});
       const astronomy = await fetch(`https://api.weatherapi.com/v1/astronomy.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}&dt=2023-09-06`, { mode: 'cors'});
       const dataForecast = await forecast.json();
       const dataAstronomy = await astronomy.json();

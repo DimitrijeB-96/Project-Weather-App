@@ -18,16 +18,19 @@ export class Controller {
     let minTemp;
     let maxTemp;
 
+    //console.log(dataForecast);
+    //console.log(dataAstronomy);
+
     if (dataForecast && dataForecast) {
       const todayForecast = dataForecast.forecast.forecastday[0].day;
       const getDataLocation = dataForecast.location;
       const getDataCurrent = dataForecast.current;
       const unitsC = getDataCurrent.temp_c;
       const feelsLikeC = getDataCurrent.feelslike_c;
-      const windMetric = getDataCurrent.gust_kph;
+      const windMetric = getDataCurrent.wind_kph;
       const unitsF = getDataCurrent.temp_f;
       const feelsLikeF = getDataCurrent.feelslike_f;
-      const windImperial = getDataCurrent.gust_mph;
+      const windImperial = getDataCurrent.wind_mph;
       const getDataAstronomy = dataAstronomy.astronomy.astro;
 
       if (displayUnits) {
@@ -46,7 +49,8 @@ export class Controller {
 
       if (currentCity === getDataLocation.name) {
         this.view.todayWeatherCard(currentCity, getDataLocation.country, unitsTemp, displayUnits, getDataCurrent.condition.text, getDataCurrent.last_updated, getDataCurrent.is_day);
-        this.view.todayAdvanceInfo(minTemp, maxTemp, getDataAstronomy.sunrise, getDataAstronomy.sunset, getDataCurrent.humidity, todayForecast.daily_chance_of_rain, feelsLikeTemp, unitsWind, unitsTemp);
+        this.view.todayAdvanceInfo(minTemp, maxTemp, getDataAstronomy.sunrise, getDataAstronomy.sunset, getDataCurrent.humidity, todayForecast.daily_chance_of_rain, feelsLikeTemp, unitsWind, displayUnits);
+        this.view.dailyForecast(dataForecast.forecast.forecastday, getDataCurrent.condition.text, getDataCurrent.is_day, displayUnits);
       }
     }
   }

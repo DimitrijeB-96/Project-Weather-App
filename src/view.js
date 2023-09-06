@@ -10,6 +10,9 @@ export class View {
     this.searchSection = this.createElement('div', 'search-section');
     this.advanceSection = this.createElement('div', 'advance-section');
 
+    this.selectForecastSection = this.createElement('div', 'select-forecast-section');
+    this.forecastSection= this.createElement('div', 'forecast-section');
+
     this.toggleDiv = this.createElement('div', 'toggle-div');
 
     this.title = this.createElement('h1', 'title');
@@ -33,6 +36,14 @@ export class View {
     this.input.type = 'text';
     this.input.placeholder = '';
 
+    this.dailyBtn = this.createElement('button');
+    this.dailyBtn.type = 'button';
+    this.dailyBtn.textContent = 'Daily'
+
+    this.hourlyBtn = this.createElement('button');
+    this.hourlyBtn.type = 'button';
+    this.hourlyBtn.textContent = 'Hourly'
+
     this.toggleDiv.append(this.celsiousText, this.toggleInput, this.fahrenheitText);
 
     this.toggleSection.append(this.title, this.toggleDiv);
@@ -41,6 +52,10 @@ export class View {
     this.centralSection.append(this.toggleSection, this.searchSection, this.advanceSection);
 
     this.topContainer.append(this.leftSection, this.centralSection);
+
+    this.selectForecastSection.append(this.dailyBtn, this.hourlyBtn);
+    
+    this.bottomContainer.append(this.selectForecastSection, this.forecastSection);
 
     document.body.append(this.topContainer, this.bottomContainer);
   }
@@ -58,6 +73,7 @@ export class View {
     while (this.leftSection.firstChild) {
       this.leftSection.removeChild(this.leftSection.firstChild);
     }
+
     const icon = this.getIcon(wText, isDay);
     
     const div = this.createElement('div', 'today-card');
@@ -162,6 +178,52 @@ export class View {
     chanceDiv.append(humidityText, humidityValue, rainChanceText, rainChanceValue);
     othersDiv.append(feelsLikeText, feelsLikeValue, windText, windValue);
     this.advanceSection.append(tempDiv, sunDiv, chanceDiv, othersDiv);
+  }
+
+  dailyForecast(allDays, wText, isDay, units) {
+    while(this.forecastSection.firstChild) {
+      this.forecastSection.removeChild(this.forecastSection.firstChild);
+    }
+    
+    console.log(allDays);
+
+    const icon = this.getIcon(wText, isDay);
+
+    for (let i = 0; i < allDays.length; i++) {
+      const dailyCard = this.createElement('div', 'daily-card');
+      
+      const dayName = this.createElement('h3');
+      dayName.textContent = allDays[i].date; 
+
+      const weatherIcon = this.createElement('span');
+      weatherIcon.classList.add(icon);
+
+      const maxTemp = this.createElement('h3');
+      if (units) {
+        maxTemp.textContent = `${allDays[i].day.maxtemp_c} ℉`;
+      } else {
+        maxTemp.textContent = `${allDays[i].day.maxtemp_c} ℃`;
+      }
+      
+      const minTemp = this.createElement('p');
+      if (units) {
+        minTemp.textContent = `${allDays[i].day.mintemp_c} ℉`;
+      } else {
+        minTemp.textContent = `${allDays[i].day.mintemp_c} ℃`;
+      }
+      
+
+      dailyCard.append(dayName, weatherIcon, maxTemp, minTemp);
+
+      this.forecastSection.append(dailyCard);
+    }  
+  }
+
+  hourlyForecast() {
+    while(this.forecastSection.firstChild) {
+      this.forecastSection.removeChild(this.forecastSection.firstChild);
+    }
+    
   }
 
   getIcon(text, isDay) {
