@@ -39,6 +39,12 @@ export class Model {
     return this.currentCityName;
   }
 
+  changeCityName(name) {
+    this.currentCityName = name;
+
+    return this.currentCityName;
+  }
+
   addImagesToObj() {
     const sunnyImg = new Image();
     sunnyImg.src = '../images/sunny.jpg';
@@ -85,6 +91,7 @@ export class Model {
     this.imageArray[10].image = tunderstormImg;
   }
 
+  // FETCHING ASTRONOMY DATA NEED TO UPDATE ON IT'S OWN, NOW IT IS HARDCODED
   async defaultLocation() {
     try {
       const forecast = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}&days=7`, { mode: 'cors'});
@@ -100,13 +107,16 @@ export class Model {
 
   async getLocation(location) {
     try {
-      const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=757ce984dbc947619fd83911232708&q=${location}`, { mode: 'cors'});
-      const data = await response.json();
-      this.currentCityName = location;
+      const forecast = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=757ce984dbc947619fd83911232708&q=${location}&days=7`, { mode: 'cors'});
+      const astronomy = await fetch(`https://api.weatherapi.com/v1/astronomy.json?key=757ce984dbc947619fd83911232708&q=${location}&dt=2023-09-06`, { mode: 'cors'});
+      const dataForecast = await forecast.json();
+      const dataAstronomy = await astronomy.json();
 
-      return { data };
+      this.changeCityName(location);
+      
+      return Promise.all([dataForecast, dataAstronomy]);
     } catch (error) {
-      console.log(error);
+      console.log(error); 
     }
   }
 }
