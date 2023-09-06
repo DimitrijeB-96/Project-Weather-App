@@ -87,10 +87,12 @@ export class Model {
 
   async defaultLocation() {
     try {
-      const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}`, { mode: 'cors'});
-      const data = await response.json();
+      const forecast = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}&days=3`, { mode: 'cors'});
+      const astronomy = await fetch(`https://api.weatherapi.com/v1/astronomy.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}&dt=2023-09-06`, { mode: 'cors'});
+      const dataForecast = await forecast.json();
+      const dataAstronomy = await astronomy.json();
       
-      return { data };
+      return Promise.all([dataForecast, dataAstronomy]);
     } catch (error) {
       console.log(error); 
     }

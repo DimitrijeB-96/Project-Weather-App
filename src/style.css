@@ -324,5 +324,29 @@ p, label {
 }
 
 .advance-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+
   border: 2px solid black;
 }
+
+.advance-section div {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.advance-section h3 {
+  font-size: 1.4em;
+}
+
+.advance-section div p:first-of-type {
+  margin-bottom: 2em;
+}
+
+.advance-section p {
+  font-size: 1.2em;
+}
+

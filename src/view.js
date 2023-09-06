@@ -35,24 +35,12 @@ export class View {
 
     this.toggleDiv.append(this.celsiousText, this.toggleInput, this.fahrenheitText);
 
-    // Min Temp, Max Temp;
-    this.minTempText = this.createElement('h3');
-    this.minTempText.textContent = 'Min Temp';
-    // Sunrise, Sunset;
-    // Humidity, Feels Like;
-    // Chance of Rain;
-    // Wind;
-    
-
     this.toggleSection.append(this.title, this.toggleDiv);
     this.searchSection.append(this.input, this.inputLabel);
-    this.advanceSection.append(this.minTempText);
 
-    //this.leftSection.append();
     this.centralSection.append(this.toggleSection, this.searchSection, this.advanceSection);
 
     this.topContainer.append(this.leftSection, this.centralSection);
-    //this.bottomContainer.append();
 
     document.body.append(this.topContainer, this.bottomContainer);
   }
@@ -98,6 +86,82 @@ export class View {
     
     div.append(cityName, countryName, temperature, weatherIcon, weatherText, dateAndTime);
     this.leftSection.append(div);
+  }
+
+  todayAdvanceInfo(minTemp, maxTemp, sunrise, sunset, humidity, rainChance, feelsLike, wind, units) {
+    while(this.advanceSection.firstChild) {
+      this.advanceSection.removeChild(this.advanceSection.firstChild);
+    }
+
+    const tempDiv = this.createElement('div');
+
+    const minTempText = this.createElement('h3');
+    minTempText.textContent = 'MINIMUM';
+    const minTempValue = this.createElement('p');
+    if (units) {
+      minTempValue.textContent = `${minTemp} ℉`;
+    } else {
+      minTempValue.textContent = `${minTemp} ℃`;
+    }
+
+    const maxTempText = this.createElement('h3');
+    maxTempText.textContent = 'MAXIMUM';
+    const maxTempValue = this.createElement('p');
+    if (units) {
+      maxTempValue.textContent = `${maxTemp} ℉`;
+    } else {
+      maxTempValue.textContent = `${maxTemp} ℃`;
+    }
+
+    const sunDiv = this.createElement('div');
+
+    const sunriseText = this.createElement('h3');
+    sunriseText.textContent = 'SUNRISE';
+    const sunriseValue = this.createElement('p');
+    sunriseValue.textContent = sunrise;
+
+    const sunsetText = this.createElement('h3');
+    sunsetText.textContent = 'SUNSET';
+    const sunsetValue = this.createElement('p');
+    sunsetValue.textContent = sunset;
+
+    const chanceDiv = this.createElement('div');
+
+    const humidityText = this.createElement('h3');
+    humidityText.textContent = 'HUMIDITY';
+    const humidityValue = this.createElement('p');
+    humidityValue.textContent = `${humidity} %`;
+
+    const rainChanceText = this.createElement('h3');
+    rainChanceText.textContent = 'CHANCE OF RAIN';
+    const rainChanceValue = this.createElement('p');
+    rainChanceValue.textContent = `${rainChance} %`;
+
+    const othersDiv = this.createElement('div');
+    
+    const feelsLikeText = this.createElement('h3');
+    feelsLikeText.textContent = 'FEELS LIKE';
+    const feelsLikeValue = this.createElement('p');
+    if (units) {
+      feelsLikeValue.textContent = `${feelsLike} ℉`;
+    } else {
+      feelsLikeValue.textContent = `${feelsLike} ℃`;
+    }
+
+    const windText = this.createElement('h2');
+    windText.textContent = 'WIND';
+    const windValue = this.createElement('p');
+    if (units) {
+      windValue.textContent = `${wind} mp/h`;
+    } else {
+      windValue.textContent = `${wind} km/h`;
+    }
+
+    tempDiv.append(minTempText, minTempValue, maxTempText, maxTempValue);
+    sunDiv.append(sunriseText, sunriseValue, sunsetText, sunsetValue);
+    chanceDiv.append(humidityText, humidityValue, rainChanceText, rainChanceValue);
+    othersDiv.append(feelsLikeText, feelsLikeValue, windText, windValue);
+    this.advanceSection.append(tempDiv, sunDiv, chanceDiv, othersDiv);
   }
 
   getIcon(text, isDay) {
