@@ -217,40 +217,32 @@ export class View {
     }  
   }
 
-  hourlyForecast(allDays, units) {
+  hourlyForecast(allHours, days, units) {
     while(this.forecastSection.firstChild) {
       this.forecastSection.removeChild(this.forecastSection.firstChild);
     }
 
-    for (let i = 0; i < allDays.length; i++) {
-      const dailyCard = this.createElement('div', 'daily-card');
+    for (let i = 0; i < allHours.length; i++) {
+      const hourlyCard = this.createElement('div', 'hourly-card');
 
-      const icon = this.getFutureIcons(allDays[i].day.condition.text);
+      const icon = this.getIcon(allHours[i].iconText, days);
       
       const dayName = this.createElement('h3');
-      dayName.textContent = allDays[i].date; 
+      dayName.textContent = allHours[i].todayHour; 
 
       const weatherIcon = this.createElement('span');
       weatherIcon.classList.add(icon);
 
-      const maxTemp = this.createElement('h3');
+      const temp = this.createElement('h3');
       if (units) {
-        maxTemp.textContent = `${allDays[i].day.maxtemp_f} ℉`;
+        temp.textContent = `${allHours[i].temp_f} ℉`;
       } else {
-        maxTemp.textContent = `${allDays[i].day.maxtemp_c} ℃`;
+        temp.textContent = `${allHours[i].temp_c} ℃`;
       }
-      
-      const minTemp = this.createElement('p');
-      if (units) {
-        minTemp.textContent = `${allDays[i].day.mintemp_f} ℉`;
-      } else {
-        minTemp.textContent = `${allDays[i].day.mintemp_c} ℃`;
-      }
-      
 
-      dailyCard.append(dayName, weatherIcon, maxTemp, minTemp);
+      hourlyCard.append(dayName, weatherIcon, temp);
 
-      this.forecastSection.append(dailyCard);
+      this.forecastSection.append(hourlyCard);
     }
   }
 
@@ -262,7 +254,7 @@ export class View {
     } else if (text === 'Clear') {
       icon = 'night';
     } else if (text === 'Partly cloudy' && isDay === 1) {
-      icon = 'partially-sunny';
+      icon = 'partly-sunny';
     } else if (text === 'Partly cloudy' && isDay === 0) {
       icon = 'cloudy-night';
     } else if (text === 'Overcast' || text === 'Cloudy') {

@@ -2,7 +2,7 @@
 
 // https://api.weatherapi.com/v1/current.json?key=757ce984dbc947619fd83911232708&q=${location}
 
-import { format, parseJSON } from 'date-fns';
+import { format, getHours } from 'date-fns';
 
 export class Model {
   constructor() {
@@ -56,7 +56,7 @@ export class Model {
 
     array.forEach(element => {
       splittedDate.push(element.split('-').map(e => parseInt(e)));
-    })
+    });
 
     let daysName = [];
 
@@ -68,6 +68,91 @@ export class Model {
     }
 
     return daysName;
+  }
+
+  getHours(allDays, h) {
+    let timeNow = h.last_updated;
+    
+    let todayDate = timeNow.split(' ')[0];
+    let todayTime = timeNow.split(' ')[1];
+
+    todayDate = todayDate.split('-');
+    todayTime = todayTime.split(':');
+
+    let getThisHour = getHours(new Date(todayDate[0], todayDate[1], todayDate[2], todayTime[0], todayTime[1]));
+
+    let today = allDays[0].hour;
+    let tomorrow = allDays[1].hour;
+
+    let allTodayHours = [];
+    let allTodayTempC = [];
+    let allTodayTempF = [];
+    let allTodayWeatherText = [];
+
+    today.forEach(hour => {
+      allTodayHours.push(hour.time);
+      allTodayTempC.push(hour.temp_c);
+      allTodayTempF.push(hour.temp_f);
+      allTodayWeatherText.push(hour.condition.text);
+    });
+
+    let todayHours = [];
+
+    allTodayHours.forEach(hour => {
+      hour = hour.split(' ');
+
+      todayHours.push(hour[1]);
+    });
+
+    let todayResult = todayHours.map((hour, i) => ({
+      todayHour: hour,
+      temp_c: allTodayTempC[i],
+      temp_f: allTodayTempF[i],
+      iconText: allTodayWeatherText[i]
+    }));
+
+    let allTomorrowHours = [];
+    let allTomorrowTempC = [];
+    let allTomorrowTempF = [];
+    let allTomorrowWeatherText = [];
+
+    tomorrow.forEach(hour => {
+      allTomorrowHours.push(hour.time);
+      allTomorrowTempC.push(hour.temp_c);
+      allTomorrowTempF.push(hour.temp_f);
+      allTomorrowWeatherText.push(hour.condition.text);
+    });
+
+    let tomorrowHours = [];
+
+    allTomorrowHours.forEach(hour => {
+      hour = hour.split(' ');
+
+      tomorrowHours.push(hour[1]);
+    });
+
+    let tomorrowResult = tomorrowHours.map((hour, i) => ({
+      tomorrowHour: hour,
+      temp_c: allTomorrowTempC[i],
+      temp_f: allTomorrowTempF[i],
+      iconText: allTomorrowWeatherText[i]
+    }));
+
+    let allTogether = [...todayResult, ...tomorrowResult];
+
+    let result = [];
+
+    let counter = 1;
+    for (let i = getThisHour + 1; i < allTogether.length; i++) {
+      result.push(allTogether[i]);
+      
+      if (counter === 12) {
+        break;
+      }
+      counter++;
+    }
+
+    return result;
   }
 
   addImagesToObj() {

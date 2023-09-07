@@ -36,6 +36,9 @@ export class Controller {
       const getDataAstronomy = dataAstronomy.astronomy.astro;
 
       const days = this.model.getDayName(getDataForecast.forecastday);
+      const hours = this.model.getHours(getDataForecast.forecastday, getDataCurrent);
+
+      //console.log(hours);
 
       if (displayUnits) {
         unitsTemp = unitsF;
@@ -54,8 +57,8 @@ export class Controller {
       if (currentCity === getDataLocation.name) {
         this.view.todayWeatherCard(currentCity, getDataLocation.country, unitsTemp, displayUnits, getDataCurrent.condition.text, getDataCurrent.last_updated, getDataCurrent.is_day);
         this.view.todayAdvanceInfo(minTemp, maxTemp, getDataAstronomy.sunrise, getDataAstronomy.sunset, getDataCurrent.humidity, todayForecast.daily_chance_of_rain, feelsLikeTemp, unitsWind, displayUnits);
-        this.view.dailyForecast(getDataForecast.forecastday, days,  displayUnits);
-        //this.view.hourlyForecast(dataForecast.forecast.forecastday);
+        //this.view.dailyForecast(getDataForecast.forecastday, days,  displayUnits);
+        this.view.hourlyForecast(hours, days, displayUnits);
       }
     }
   }
@@ -88,6 +91,9 @@ export class Controller {
       const getDataAstronomy = dataAstronomy.astronomy.astro;
 
       const days = this.model.getDayName(getDataForecast.forecastday);
+      const hours = this.model.getHours(getDataForecast.forecastday, getDataCurrent);
+
+      console.log(hours);
 
       if (displayUnits) {
         unitsTemp = unitsF;
@@ -105,15 +111,14 @@ export class Controller {
 
       this.view.todayWeatherCard(getDataLocation.name, getDataLocation.country, unitsTemp, displayUnits, getDataCurrent.condition.text, getDataCurrent.last_updated, getDataCurrent.is_day);
       this.view.todayAdvanceInfo(minTemp, maxTemp, getDataAstronomy.sunrise, getDataAstronomy.sunset, getDataCurrent.humidity, todayForecast.daily_chance_of_rain, feelsLikeTemp, unitsWind, displayUnits);
-      this.view.dailyForecast(dataForecast.forecast.forecastday, days, displayUnits);
-      //this.view.hourlyForecast();
+      //this.view.dailyForecast(dataForecast.forecast.forecastday, days, displayUnits);
+      this.view.hourlyForecast(hours, days, displayUnits);
     }
   }
 
   handleUnitsChange = (input) => {
     this.model.changeUnits();
-    const city = this.model.getCityName();
-    console.log(city);
+    this.model.getCityName();
     const currentUnits = this.model.getUnits();
     
     if (currentUnits !== input) {
