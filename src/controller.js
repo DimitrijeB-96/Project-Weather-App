@@ -58,7 +58,7 @@ export class Controller {
         this.view.todayWeatherCard(currentCity, getDataLocation.country, unitsTemp, displayUnits, getDataCurrent.condition.text, getDataCurrent.last_updated, getDataCurrent.is_day);
         this.view.todayAdvanceInfo(minTemp, maxTemp, getDataAstronomy.sunrise, getDataAstronomy.sunset, getDataCurrent.humidity, todayForecast.daily_chance_of_rain, feelsLikeTemp, unitsWind, displayUnits);
         //this.view.dailyForecast(getDataForecast.forecastday, days,  displayUnits);
-        this.view.hourlyForecast(hours, days, displayUnits);
+        this.view.hourlyForecast(hours, getDataCurrent.is_day, displayUnits);
       }
     }
   }
@@ -112,7 +112,7 @@ export class Controller {
       this.view.todayWeatherCard(getDataLocation.name, getDataLocation.country, unitsTemp, displayUnits, getDataCurrent.condition.text, getDataCurrent.last_updated, getDataCurrent.is_day);
       this.view.todayAdvanceInfo(minTemp, maxTemp, getDataAstronomy.sunrise, getDataAstronomy.sunset, getDataCurrent.humidity, todayForecast.daily_chance_of_rain, feelsLikeTemp, unitsWind, displayUnits);
       //this.view.dailyForecast(dataForecast.forecast.forecastday, days, displayUnits);
-      this.view.hourlyForecast(hours, days, displayUnits);
+      this.view.hourlyForecast(hours, getDataCurrent.is_day, displayUnits);
     }
   }
 

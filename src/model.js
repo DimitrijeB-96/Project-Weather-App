@@ -104,8 +104,8 @@ export class Model {
       todayHours.push(hour[1]);
     });
 
-    let todayResult = todayHours.map((hour, i) => ({
-      todayHour: hour,
+    let todayResult = todayHours.map((h, i) => ({
+      hour: h,
       temp_c: allTodayTempC[i],
       temp_f: allTodayTempF[i],
       iconText: allTodayWeatherText[i]
@@ -131,8 +131,8 @@ export class Model {
       tomorrowHours.push(hour[1]);
     });
 
-    let tomorrowResult = tomorrowHours.map((hour, i) => ({
-      tomorrowHour: hour,
+    let tomorrowResult = tomorrowHours.map((h, i) => ({
+      hour: h,
       temp_c: allTomorrowTempC[i],
       temp_f: allTomorrowTempF[i],
       iconText: allTomorrowWeatherText[i]

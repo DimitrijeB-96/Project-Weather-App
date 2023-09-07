@@ -217,7 +217,7 @@ export class View {
     }  
   }
 
-  hourlyForecast(allHours, days, units) {
+  hourlyForecast(allHours, isDay, units) {
     while(this.forecastSection.firstChild) {
       this.forecastSection.removeChild(this.forecastSection.firstChild);
     }
@@ -225,10 +225,10 @@ export class View {
     for (let i = 0; i < allHours.length; i++) {
       const hourlyCard = this.createElement('div', 'hourly-card');
 
-      const icon = this.getIcon(allHours[i].iconText, days);
+      const icon = this.getIcon(allHours[i].iconText, isDay);
       
       const dayName = this.createElement('h3');
-      dayName.textContent = allHours[i].todayHour; 
+      dayName.textContent = allHours[i].hour; 
 
       const weatherIcon = this.createElement('span');
       weatherIcon.classList.add(icon);
@@ -254,7 +254,7 @@ export class View {
     } else if (text === 'Clear') {
       icon = 'night';
     } else if (text === 'Partly cloudy' && isDay === 1) {
-      icon = 'partly-sunny';
+      icon = 'partly-cloudy';
     } else if (text === 'Partly cloudy' && isDay === 0) {
       icon = 'cloudy-night';
     } else if (text === 'Overcast' || text === 'Cloudy') {
