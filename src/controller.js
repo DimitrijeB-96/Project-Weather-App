@@ -6,6 +6,7 @@ export class Controller {
     this.handleTodayCard();
     this.view.handleInput(this.handleTodayInput);
     this.view.handleToggle(this.handleUnitsChange);
+    this.view.handleChangeForecastDisplay();
   }
 
   handleTodayCard = async () => {
@@ -18,11 +19,12 @@ export class Controller {
     let minTemp;
     let maxTemp;
 
-    //console.log(dataForecast);
+    console.log(dataForecast);
     //console.log(dataAstronomy);
 
     if (dataForecast && dataForecast) {
       const todayForecast = dataForecast.forecast.forecastday[0].day;
+      const getDataForecast = dataForecast.forecast;
       const getDataLocation = dataForecast.location;
       const getDataCurrent = dataForecast.current;
       const unitsC = getDataCurrent.temp_c;
@@ -32,6 +34,8 @@ export class Controller {
       const feelsLikeF = getDataCurrent.feelslike_f;
       const windImperial = getDataCurrent.wind_mph;
       const getDataAstronomy = dataAstronomy.astronomy.astro;
+
+      const days = this.model.getDayName(getDataForecast.forecastday);
 
       if (displayUnits) {
         unitsTemp = unitsF;
@@ -50,7 +54,8 @@ export class Controller {
       if (currentCity === getDataLocation.name) {
         this.view.todayWeatherCard(currentCity, getDataLocation.country, unitsTemp, displayUnits, getDataCurrent.condition.text, getDataCurrent.last_updated, getDataCurrent.is_day);
         this.view.todayAdvanceInfo(minTemp, maxTemp, getDataAstronomy.sunrise, getDataAstronomy.sunset, getDataCurrent.humidity, todayForecast.daily_chance_of_rain, feelsLikeTemp, unitsWind, displayUnits);
-        this.view.dailyForecast(dataForecast.forecast.forecastday, displayUnits);
+        this.view.dailyForecast(getDataForecast.forecastday, days,  displayUnits);
+        //this.view.hourlyForecast(dataForecast.forecast.forecastday);
       }
     }
   }
@@ -71,6 +76,7 @@ export class Controller {
 
     if (dataForecast && dataForecast) {
       const todayForecast = dataForecast.forecast.forecastday[0].day;
+      const getDataForecast = dataForecast.forecast;
       const getDataLocation = dataForecast.location;
       const getDataCurrent = dataForecast.current;
       const unitsC = getDataCurrent.temp_c;
@@ -80,6 +86,8 @@ export class Controller {
       const feelsLikeF = getDataCurrent.feelslike_f;
       const windImperial = getDataCurrent.wind_mph;
       const getDataAstronomy = dataAstronomy.astronomy.astro;
+
+      const days = this.model.getDayName(getDataForecast.forecastday);
 
       if (displayUnits) {
         unitsTemp = unitsF;
@@ -97,7 +105,8 @@ export class Controller {
 
       this.view.todayWeatherCard(getDataLocation.name, getDataLocation.country, unitsTemp, displayUnits, getDataCurrent.condition.text, getDataCurrent.last_updated, getDataCurrent.is_day);
       this.view.todayAdvanceInfo(minTemp, maxTemp, getDataAstronomy.sunrise, getDataAstronomy.sunset, getDataCurrent.humidity, todayForecast.daily_chance_of_rain, feelsLikeTemp, unitsWind, displayUnits);
-      this.view.dailyForecast(dataForecast.forecast.forecastday, displayUnits);
+      this.view.dailyForecast(dataForecast.forecast.forecastday, days, displayUnits);
+      //this.view.hourlyForecast();
     }
   }
 

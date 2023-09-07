@@ -11,7 +11,7 @@ export class View {
     this.advanceSection = this.createElement('div', 'advance-section');
 
     this.selectForecastSection = this.createElement('div', 'select-forecast-section');
-    this.forecastSection= this.createElement('div', 'forecast-section');
+    this.forecastSection = this.createElement('div', 'forecast-section');
 
     this.toggleDiv = this.createElement('div', 'toggle-div');
 
@@ -36,11 +36,11 @@ export class View {
     this.input.type = 'text';
     this.input.placeholder = '';
 
-    this.dailyBtn = this.createElement('button');
+    this.dailyBtn = this.createElement('button', 'daily-btn');
     this.dailyBtn.type = 'button';
     this.dailyBtn.textContent = 'Daily'
 
-    this.hourlyBtn = this.createElement('button');
+    this.hourlyBtn = this.createElement('button', 'hourly-btn');
     this.hourlyBtn.type = 'button';
     this.hourlyBtn.textContent = 'Hourly'
 
@@ -53,7 +53,7 @@ export class View {
 
     this.topContainer.append(this.leftSection, this.centralSection);
 
-    this.selectForecastSection.append(this.dailyBtn, this.hourlyBtn);
+    this.selectForecastSection.append(this.hourlyBtn, this.dailyBtn);
     
     this.bottomContainer.append(this.selectForecastSection, this.forecastSection);
 
@@ -180,7 +180,44 @@ export class View {
     this.advanceSection.append(tempDiv, sunDiv, chanceDiv, othersDiv);
   }
 
-  dailyForecast(allDays, units) {
+  dailyForecast(allDays, days, units) {
+    while(this.forecastSection.firstChild) {
+      this.forecastSection.removeChild(this.forecastSection.firstChild);
+    }
+
+    for (let i = 0; i < allDays.length; i++) {
+      const dailyCard = this.createElement('div', 'daily-card');
+
+      const icon = this.getFutureIcons(allDays[i].day.condition.text);
+      
+      const dayName = this.createElement('h3');
+      dayName.textContent = days[i];
+
+      const weatherIcon = this.createElement('span');
+      weatherIcon.classList.add(icon);
+
+      const maxTemp = this.createElement('h3');
+      if (units) {
+        maxTemp.textContent = `${allDays[i].day.maxtemp_f} ℉`;
+      } else {
+        maxTemp.textContent = `${allDays[i].day.maxtemp_c} ℃`;
+      }
+      
+      const minTemp = this.createElement('p');
+      if (units) {
+        minTemp.textContent = `${allDays[i].day.mintemp_f} ℉`;
+      } else {
+        minTemp.textContent = `${allDays[i].day.mintemp_c} ℃`;
+      }
+      
+
+      dailyCard.append(dayName, weatherIcon, maxTemp, minTemp);
+
+      this.forecastSection.append(dailyCard);
+    }  
+  }
+
+  hourlyForecast(allDays, units) {
     while(this.forecastSection.firstChild) {
       this.forecastSection.removeChild(this.forecastSection.firstChild);
     }
@@ -214,14 +251,7 @@ export class View {
       dailyCard.append(dayName, weatherIcon, maxTemp, minTemp);
 
       this.forecastSection.append(dailyCard);
-    }  
-  }
-
-  hourlyForecast() {
-    while(this.forecastSection.firstChild) {
-      this.forecastSection.removeChild(this.forecastSection.firstChild);
     }
-    
   }
 
   getIcon(text, isDay) {
@@ -321,5 +351,16 @@ export class View {
         this.input.blur();
       }
     })
+  }
+
+  // NOT COMPLETED
+  handleChangeForecastDisplay(handler) {
+    this.selectForecastSection.addEventListener('click', (e) => {
+      if (e.target.className === 'daily-btn') {
+        handler('daily');
+      } else if (e.target.className === 'hourly-btn') {
+        handler('hourly');
+      }
+    });
   }
 }

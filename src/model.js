@@ -2,7 +2,7 @@
 
 // https://api.weatherapi.com/v1/current.json?key=757ce984dbc947619fd83911232708&q=${location}
 
-// Import npm date library
+import { format, parseJSON } from 'date-fns';
 
 export class Model {
   constructor() {
@@ -43,6 +43,31 @@ export class Model {
     this.currentCityName = name;
 
     return this.currentCityName;
+  }
+
+  getDayName(allDays) {
+    let array = [];
+
+    allDays.forEach(day => {
+      array.push(day.date);
+    });
+
+    let splittedDate = [];
+
+    array.forEach(element => {
+      splittedDate.push(element.split('-').map(e => parseInt(e)));
+    })
+
+    let daysName = [];
+
+    for (let i = 0; i < splittedDate.length; i++) {
+      let innerArray = splittedDate[i];
+      for (let j = 0; j < innerArray.length / 3; j++) {
+        daysName.push(format(new Date(innerArray[0], innerArray[1] - 1, innerArray[2]), 'EEEE'));
+      }
+    }
+
+    return daysName;
   }
 
   addImagesToObj() {
@@ -95,7 +120,7 @@ export class Model {
   async defaultLocation() {
     try {
       const forecast = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}&days=7`, { mode: 'cors'});
-      const astronomy = await fetch(`https://api.weatherapi.com/v1/astronomy.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}&dt=2023-09-06`, { mode: 'cors'});
+      const astronomy = await fetch(`https://api.weatherapi.com/v1/astronomy.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}`, { mode: 'cors'});
       const dataForecast = await forecast.json();
       const dataAstronomy = await astronomy.json();
       
@@ -108,7 +133,7 @@ export class Model {
   async getLocation(location) {
     try {
       const forecast = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=757ce984dbc947619fd83911232708&q=${location}&days=7`, { mode: 'cors'});
-      const astronomy = await fetch(`https://api.weatherapi.com/v1/astronomy.json?key=757ce984dbc947619fd83911232708&q=${location}&dt=2023-09-06`, { mode: 'cors'});
+      const astronomy = await fetch(`https://api.weatherapi.com/v1/astronomy.json?key=757ce984dbc947619fd83911232708&q=${location}`, { mode: 'cors'});
       const dataForecast = await forecast.json();
       const dataAstronomy = await astronomy.json();
 
