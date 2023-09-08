@@ -64,6 +64,7 @@ export class Controller {
         }
       }
     } catch(error) {
+      // NOT IMPLEMENTED YET
       console.log('handleCityDefault', error);
     }
   }
@@ -120,6 +121,7 @@ export class Controller {
         }
       }
     } catch (error) {
+      // NOT IMPLEMENTED YET
       this.handleCityDefault();
     }
   }
