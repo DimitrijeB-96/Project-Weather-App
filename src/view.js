@@ -295,7 +295,7 @@ export class View {
     if (text === 'Sunny') {
       icon = 'sunny';
     } else if (text === 'Partly cloudy') {
-      icon = 'partially-sunny';
+      icon = 'partly-cloudy';
     } else if (text === 'Overcast' || text === 'Cloudy') {
       icon = 'overcast';
     } else if (text === 'Mist' || text === 'Fog' || text === 'Freezing fog') {
@@ -345,7 +345,6 @@ export class View {
     })
   }
 
-  // NOT COMPLETED
   handleChangeDailyInfo(handler) {
     this.selectForecastSection.addEventListener('click', (e) => {
       if (e.target.className === 'daily-btn') {

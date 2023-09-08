@@ -8,6 +8,7 @@ export class Model {
   constructor() {
     // False represent Celsius, true represent Fahrenheit
     this.isUnits = false;
+    this.isHourly = true;
     this.currentCityName = 'Novi Sad';
 
     this.imageArray = [
@@ -43,6 +44,14 @@ export class Model {
     this.currentCityName = name;
 
     return this.currentCityName;
+  }
+
+  getInfo() {
+    return this.isHourly;
+  }
+
+  changeInfo() {
+    return this.isHourly = !this.isHourly;
   }
 
   getDayName(allDays) {

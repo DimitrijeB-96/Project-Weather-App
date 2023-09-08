@@ -3,16 +3,17 @@ export class Controller {
     this.model = model;
     this.view = view;
 
-    this.handleTodayCard();
-    this.view.handleInput(this.handleTodayInput);
+    this.handleCityDefault();
+    this.view.handleInput(this.handleCityInput);
     this.view.handleToggle(this.handleUnitsChange);
     this.view.handleChangeDailyInfo(this.handleInfoChange);
   }
 
-  handleTodayCard = async () => {
+  handleCityDefault = async () => {
     const [dataForecast, dataAstronomy] = await this.model.defaultLocation();
     let displayUnits = this.model.getUnits();
     let currentCity = this.model.getCityName();
+    let isHourly = this.model.getInfo();
     let unitsTemp;
     let feelsLikeTemp;
     let unitsWind;
@@ -32,6 +33,7 @@ export class Controller {
       const windImperial = getDataCurrent.wind_mph;
       const getDataAstronomy = dataAstronomy.astronomy.astro;
 
+      const days = this.model.getDayName(getDataForecast.forecastday);
       const hours = this.model.getHours(getDataForecast.forecastday, getDataCurrent);
 
       if (displayUnits) {
@@ -51,14 +53,19 @@ export class Controller {
       if (currentCity === getDataLocation.name) {
         this.view.todayWeatherCard(currentCity, getDataLocation.country, unitsTemp, displayUnits, getDataCurrent.condition.text, getDataCurrent.last_updated, getDataCurrent.is_day);
         this.view.todayAdvanceInfo(minTemp, maxTemp, getDataAstronomy.sunrise, getDataAstronomy.sunset, getDataCurrent.humidity, todayForecast.daily_chance_of_rain, feelsLikeTemp, unitsWind, displayUnits);
-        this.view.hourlyForecast(hours, getDataCurrent.is_day, displayUnits);
+        if (isHourly) {
+          this.view.hourlyForecast(hours, getDataCurrent.is_day, displayUnits);
+        } else {
+          this.view.dailyForecast(getDataForecast.forecastday, days, displayUnits);
+        }
       }
     }
   }
 
-  handleTodayInput = async (search) => {
+  handleCityInput = async (search) => {
     const [dataForecast, dataAstronomy] = await this.model.getLocation(search);
     let displayUnits = this.model.getUnits();
+    let isHourly = this.model.getInfo();
     let unitsTemp;
     let feelsLikeTemp;
     let unitsWind;
@@ -79,6 +86,7 @@ export class Controller {
       const getDataAstronomy = dataAstronomy.astronomy.astro;
 
       const hours = this.model.getHours(getDataForecast.forecastday, getDataCurrent);
+      const days = this.model.getDayName(getDataForecast.forecastday);
 
       console.log(hours);
 
@@ -98,7 +106,11 @@ export class Controller {
 
       this.view.todayWeatherCard(getDataLocation.name, getDataLocation.country, unitsTemp, displayUnits, getDataCurrent.condition.text, getDataCurrent.last_updated, getDataCurrent.is_day);
       this.view.todayAdvanceInfo(minTemp, maxTemp, getDataAstronomy.sunrise, getDataAstronomy.sunset, getDataCurrent.humidity, todayForecast.daily_chance_of_rain, feelsLikeTemp, unitsWind, displayUnits);
-      this.view.hourlyForecast(hours, getDataCurrent.is_day, displayUnits);
+      if (isHourly) {
+        this.view.hourlyForecast(hours, getDataCurrent.is_day, displayUnits);
+      } else {
+        this.view.dailyForecast(getDataForecast.forecastday, days, displayUnits);
+      }
     }
   }
 
@@ -110,12 +122,13 @@ export class Controller {
     if (currentUnits !== input) {
       this.model.changeUnits();
     }
-    this.handleTodayCard();
+    this.handleCityDefault();
   }
 
   handleInfoChange = async (btn) => {
     const [dataForecast, dataAstronomy] = await this.model.defaultLocation();
     let displayUnits = this.model.getUnits();
+    let isHourly = this.model.getInfo();
 
     if (dataForecast && dataForecast) {
       const getDataForecast = dataForecast.forecast;
@@ -125,9 +138,11 @@ export class Controller {
       const hours = this.model.getHours(getDataForecast.forecastday, getDataCurrent);
 
       if (btn === 'hourly') {
+        isHourly === true ? true : this.model.changeInfo();
         this.view.hourlyForecast(hours, getDataCurrent.is_day, displayUnits);
       } else if (btn === 'daily') {
-        this.view.dailyForecast(dataForecast.forecast.forecastday, days, displayUnits);
+        isHourly === false ? false : this.model.changeInfo();
+        this.view.dailyForecast(getDataForecast.forecastday, days, displayUnits);
       }
     }
   }
