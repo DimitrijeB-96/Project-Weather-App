@@ -1,5 +1,28 @@
 export class View {
   constructor() {
+    this.root = document.querySelector(':root');
+    this.rootStyles = getComputedStyle(this.root);
+
+    this.sunnyBackground = this.rootStyles.getPropertyValue('--sunny-background');
+    this.sunnyPlate = this.rootStyles.getPropertyValue('--sunny-plate');
+    this.sunnyShadow = this.rootStyles.getPropertyValue('--sunny-shadow');
+
+    this.cloudyBackground = this.rootStyles.getPropertyValue('--cloudy-background');
+    this.cloudyPlate = this.rootStyles.getPropertyValue('--cloudy-plate');
+    this.cloudyShadow = this.rootStyles.getPropertyValue('--cloudy-shadow');
+
+    this.nightBackground = this.rootStyles.getPropertyValue('--night-background');
+    this.nightPlate = this.rootStyles.getPropertyValue('--night-plate');
+    this.nightShadow = this.rootStyles.getPropertyValue('--night-shadow');
+
+    this.thunderBackground = this.rootStyles.getPropertyValue('--thunder-background');
+    this.thunderPlate = this.rootStyles.getPropertyValue('--thunder-plate');
+    this.thunderShadow = this.rootStyles.getPropertyValue('--thunder-shadow');
+
+    this.coldBackground = this.rootStyles.getPropertyValue('--cold-background');
+    this.coldPlate = this.rootStyles.getPropertyValue('--cold-plate');
+    this.coldShadow = this.rootStyles.getPropertyValue('--cold-shadow');
+
     this.topContainer = this.createElement('div', 'top-container');
     this.bottomContainer = this.createElement('div', 'bottom-container');
 
@@ -13,16 +36,8 @@ export class View {
     this.selectForecastSection = this.createElement('div', 'select-forecast-section');
     this.forecastSection = this.createElement('div', 'forecast-section');
 
-    this.toggleDiv = this.createElement('div', 'toggle-div');
-
     this.title = this.createElement('h1', 'title');
     this.title.textContent = 'Weather APP';
-
-    this.celsiousText = this.createElement('p');
-    this.celsiousText.textContent = '℃';
-
-    this.fahrenheitText = this.createElement('p');
-    this.fahrenheitText.textContent = '℉';
 
     this.toggleInput = this.createElement('input', 'input-toggle');
     this.toggleInput.type = 'checkbox';
@@ -44,9 +59,7 @@ export class View {
     this.hourlyBtn.type = 'button';
     this.hourlyBtn.textContent = 'Hourly'
 
-    this.toggleDiv.append(this.celsiousText, this.toggleInput, this.fahrenheitText);
-
-    this.toggleSection.append(this.title, this.toggleDiv);
+    this.toggleSection.append(this.title, this.toggleInput);
     this.searchSection.append(this.input, this.inputLabel);
 
     this.centralSection.append(this.toggleSection, this.searchSection, this.advanceSection);
@@ -353,5 +366,98 @@ export class View {
         handler('hourly');
       }
     });
+  }
+
+  handleDisplayedColors(weather, isDay, isHourly) {
+    const text = this.getIcon(weather, isDay);
+    
+    if (text === 'sunny' || text === 'partly-cloudy') {
+      this.getColors(this.sunnyBackground, this.sunnyPlate, this.sunnyShadow, isHourly);
+    } else if (text === 'cloudy-night' || text === 'night') {
+      this.getColors(this.nightBackground, this.nightPlate, this.nightShadow, isHourly);
+    } else if (text === 'rainy' || text === 'rain-heavy' || text === 'drizzle' || text === 'overcast') {
+      this.getColors(this.cloudyBackground, this.cloudyPlate, this.cloudyShadow, isHourly);
+    } else if (text === 'thunder' || text === 'thunder-rain') {
+      this.getColors(this.thunderBackground, this.thunderPlate, this.thunderShadow, isHourly);
+    } else if (text === 'snow' || text === 'freezing' || text === 'hail' || text === 'sleet' || text === 'foggy') {
+      this.getColors(this.coldBackground, this.coldPlate, this.coldShadow, isHourly);
+      this.title.style.color = this.coldPlate;
+      this.inputLabel.style.color = this.coldPlate;
+      this.input.style.color = this.coldShadow;
+    }
+  }
+
+  getColors(background, plate, shadow, isHourly) {
+    document.body.style.backgroundColor = background;
+
+    const todayCard = document.querySelector('.today-card');
+    todayCard.style.backgroundColor = plate;
+    todayCard.style.boxShadow = `8px 8px 0 0 ${shadow}`;
+
+    this.input.style.borderBottom = `4px solid ${shadow}`;
+
+    this.advanceSection.style.backgroundColor = plate;
+    this.advanceSection.style.boxShadow = `8px 8px 0 0 ${shadow}`;
+
+    this.forecastSection.style.backgroundColor = plate;
+    this.forecastSection.style.boxShadow = `8px 8px 0 0 ${shadow}`;
+
+    if (isHourly) {
+      this.hourlyBtn.style.backgroundColor = plate;
+      this.dailyBtn.style.backgroundColor = shadow;
+    } else {
+      this.hourlyBtn.style.backgroundColor = shadow;
+      this.dailyBtn.style.backgroundColor = plate;
+    }
+  }
+
+  btnColors(weather, isDay, clickedBtn, notClickedBtn) {
+    const text = this.getIcon(weather, isDay);
+
+    if (clickedBtn === 'hourly') {
+      clickedBtn = this.hourlyBtn;
+      notClickedBtn = this.dailyBtn;
+    } else if (clickedBtn === 'daily') {
+      clickedBtn = this.dailyBtn;
+      notClickedBtn = this.hourlyBtn;
+    }
+
+    if (text === 'sunny' || text === 'partly-cloudy') {
+      clickedBtn.style.backgroundColor = this.sunnyPlate;
+      notClickedBtn.style.backgroundColor = this.sunnyShadow;
+    } else if (text === 'cloudy-night' || text === 'night') {
+      clickedBtn.style.backgroundColor = this.nightPlate;
+      notClickedBtn.style.backgroundColor = this.nightShadow;
+    } else if (text === 'rainy' || text === 'rain-heavy' || text === 'drizzle' || text === 'overcast') {
+      clickedBtn.style.backgroundColor = this.cloudyPlate;
+      notClickedBtn.style.backgroundColor = this.cloudyShadow;
+    } else if (text === 'thunder' || text === 'thunder-rain') {
+      clickedBtn.style.backgroundColor = this.thunderPlate;
+      notClickedBtn.style.backgroundColor = this.thunderShadow;
+    } else if (text === 'snow' || text === 'freezing' || text === 'hail' || text === 'sleet' || text === 'foggy') {
+      clickedBtn.style.backgroundColor = this.coldPlate;
+      notClickedBtn.style.backgroundColor = this.coldShadow;
+    }
+  }
+
+  toggleBtnColor(weather, isDay) {
+    const text = this.getIcon(weather, isDay);
+
+    if (text === 'sunny' || text === 'partly-cloudy') {
+      this.toggleInput.style.setProperty('--toggle-background', this.sunnyPlate);
+      this.toggleInput.style.setProperty('--toggle-circle', this.sunnyShadow);
+    } else if (text === 'cloudy-night' || text === 'night') {
+      this.toggleInput.style.setProperty('--toggle-background', this.nightPlate);
+      this.toggleInput.style.setProperty('--toggle-circle', this.nightShadow);
+    } else if (text === 'rainy' || text === 'rain-heavy' || text === 'drizzle' || text === 'overcast') {
+      this.toggleInput.style.setProperty('--toggle-background', this.cloudyPlate);
+      this.toggleInput.style.setProperty('--toggle-circle', this.cloudyShadow);
+    } else if (text === 'thunder' || text === 'thunder-rain') {
+      this.toggleInput.style.setProperty('--toggle-background', this.thunderPlate);
+      this.toggleInput.style.setProperty('--toggle-circle', this.thunderShadow);
+    } else if (text === 'snow' || text === 'freezing' || text === 'hail' || text === 'sleet' || text === 'foggy') {
+      this.toggleInput.style.setProperty('--toggle-background', this.coldPlate);
+      this.toggleInput.style.setProperty('--toggle-circle', this.coldShadow);
+    }
   }
 }
