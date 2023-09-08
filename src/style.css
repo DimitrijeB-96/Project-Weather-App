@@ -410,3 +410,20 @@ p, label {
   font-size: 1.5em;
 }
 
+.hourly-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+
+  height: 90%;
+  width: 8%;
+  
+  padding: 5px;
+  border: 2px solid black;
+}
+
+.hourly-card span{
+  height: 80px;
+  width: 80px;
+}

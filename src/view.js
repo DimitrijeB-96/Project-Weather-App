@@ -346,7 +346,7 @@ export class View {
   }
 
   // NOT COMPLETED
-  handleChangeForecastDisplay(handler) {
+  handleChangeDailyInfo(handler) {
     this.selectForecastSection.addEventListener('click', (e) => {
       if (e.target.className === 'daily-btn') {
         handler('daily');
