@@ -82,12 +82,12 @@ export class View {
     return element;
   }
 
-  todayWeatherCard(city, country, temp, units, wText, dateTime, isDay) {
+  todayWeatherCard(forecast, city, units) {
     while (this.leftSection.firstChild) {
       this.leftSection.removeChild(this.leftSection.firstChild);
     }
 
-    const icon = this.getIcon(wText, isDay);
+    const icon = this.getIcon(forecast.current.condition.text, forecast.current.is_day);
     
     const div = this.createElement('div', 'today-card');
     
@@ -95,29 +95,29 @@ export class View {
     cityName.textContent = city;
 
     const countryName = this.createElement('h3', 'country-name');
-    countryName.textContent = country;
+    countryName.textContent = forecast.location.country;
 
     const temperature = this.createElement('h2', 'temperature');
     if (units) {
-      temperature.textContent = `${temp} ℉`;
+      temperature.textContent = `${forecast.current.temp_f} ℉`;
     } else {
-      temperature.textContent = `${temp} ℃`;
+      temperature.textContent = `${forecast.current.temp_c} ℃`;
     }
 
     const weatherIcon = this.createElement('span');
     weatherIcon.classList.add(icon);
 
     const weatherText = this.createElement('p', 'weather-text');
-    weatherText.textContent = wText;
+    weatherText.textContent = forecast.current.condition.text;
 
     const dateAndTime = this.createElement('p', 'date-time');
-    dateAndTime.textContent = dateTime;
+    dateAndTime.textContent = forecast.current.last_updated;
     
     div.append(cityName, countryName, temperature, weatherIcon, weatherText, dateAndTime);
     this.leftSection.append(div);
   }
 
-  todayAdvanceInfo(minTemp, maxTemp, sunrise, sunset, humidity, rainChance, feelsLike, wind, units) {
+  todayAdvanceInfo(astronomy, forecast, units) {
     while(this.advanceSection.firstChild) {
       this.advanceSection.removeChild(this.advanceSection.firstChild);
     }
@@ -128,18 +128,18 @@ export class View {
     minTempText.textContent = 'MINIMUM';
     const minTempValue = this.createElement('p');
     if (units) {
-      minTempValue.textContent = `${minTemp} ℉`;
+      minTempValue.textContent = `${forecast.forecast.forecastday[0].day.mintemp_f} ℉`;
     } else {
-      minTempValue.textContent = `${minTemp} ℃`;
+      minTempValue.textContent = `${forecast.forecast.forecastday[0].day.mintemp_c} ℃`;
     }
 
     const maxTempText = this.createElement('h3');
     maxTempText.textContent = 'MAXIMUM';
     const maxTempValue = this.createElement('p');
     if (units) {
-      maxTempValue.textContent = `${maxTemp} ℉`;
+      maxTempValue.textContent = `${forecast.forecast.forecastday[0].day.maxtemp_f} ℉`;
     } else {
-      maxTempValue.textContent = `${maxTemp} ℃`;
+      maxTempValue.textContent = `${forecast.forecast.forecastday[0].day.maxtemp_c} ℃`;
     }
 
     const sunDiv = this.createElement('div');
@@ -147,24 +147,24 @@ export class View {
     const sunriseText = this.createElement('h3');
     sunriseText.textContent = 'SUNRISE';
     const sunriseValue = this.createElement('p');
-    sunriseValue.textContent = sunrise;
+    sunriseValue.textContent = astronomy.astronomy.astro.sunrise;
 
     const sunsetText = this.createElement('h3');
     sunsetText.textContent = 'SUNSET';
     const sunsetValue = this.createElement('p');
-    sunsetValue.textContent = sunset;
+    sunsetValue.textContent = astronomy.astronomy.astro.sunset;
 
     const chanceDiv = this.createElement('div');
 
     const humidityText = this.createElement('h3');
     humidityText.textContent = 'HUMIDITY';
     const humidityValue = this.createElement('p');
-    humidityValue.textContent = `${humidity} %`;
+    humidityValue.textContent = `${forecast.current.humidity} %`;
 
     const rainChanceText = this.createElement('h3');
     rainChanceText.textContent = 'CHANCE OF RAIN';
     const rainChanceValue = this.createElement('p');
-    rainChanceValue.textContent = `${rainChance} %`;
+    rainChanceValue.textContent = `${forecast.forecast.forecastday[0].day.daily_chance_of_rain} %`;
 
     const othersDiv = this.createElement('div');
     
@@ -172,18 +172,18 @@ export class View {
     feelsLikeText.textContent = 'FEELS LIKE';
     const feelsLikeValue = this.createElement('p');
     if (units) {
-      feelsLikeValue.textContent = `${feelsLike} ℉`;
+      feelsLikeValue.textContent = `${forecast.current.feelslike_f} ℉`;
     } else {
-      feelsLikeValue.textContent = `${feelsLike} ℃`;
+      feelsLikeValue.textContent = `${forecast.current.feelslike_c} ℃`;
     }
 
     const windText = this.createElement('h2');
     windText.textContent = 'WIND';
     const windValue = this.createElement('p');
     if (units) {
-      windValue.textContent = `${wind} mp/h`;
+      windValue.textContent = `${forecast.current.mph} mp/h`;
     } else {
-      windValue.textContent = `${wind} km/h`;
+      windValue.textContent = `${forecast.current.wind_kph} km/h`;
     }
 
     tempDiv.append(minTempText, minTempValue, maxTempText, maxTempValue);
@@ -193,15 +193,15 @@ export class View {
     this.advanceSection.append(tempDiv, sunDiv, chanceDiv, othersDiv);
   }
 
-  dailyForecast(allDays, days, units) {
+  dailyForecast(forecastdays, days, units) {
     while(this.forecastSection.firstChild) {
       this.forecastSection.removeChild(this.forecastSection.firstChild);
     }
 
-    for (let i = 0; i < allDays.length; i++) {
+    for (let i = 0; i < forecastdays.length; i++) {
       const dailyCard = this.createElement('div', 'daily-card');
 
-      const icon = this.getFutureIcons(allDays[i].day.condition.text);
+      const icon = this.getFutureIcons(forecastdays[i].day.condition.text);
       
       const dayName = this.createElement('h3');
       dayName.textContent = days[i];
@@ -211,16 +211,16 @@ export class View {
 
       const maxTemp = this.createElement('h3');
       if (units) {
-        maxTemp.textContent = `${allDays[i].day.maxtemp_f} ℉`;
+        maxTemp.textContent = `${forecastdays[i].day.maxtemp_f} ℉`;
       } else {
-        maxTemp.textContent = `${allDays[i].day.maxtemp_c} ℃`;
+        maxTemp.textContent = `${forecastdays[i].day.maxtemp_c} ℃`;
       }
       
       const minTemp = this.createElement('p');
       if (units) {
-        minTemp.textContent = `${allDays[i].day.mintemp_f} ℉`;
+        minTemp.textContent = `${forecastdays[i].day.mintemp_f} ℉`;
       } else {
-        minTemp.textContent = `${allDays[i].day.mintemp_c} ℃`;
+        minTemp.textContent = `${forecastdays[i].day.mintemp_c} ℃`;
       }
       
 
@@ -230,27 +230,27 @@ export class View {
     }  
   }
 
-  hourlyForecast(allHours, isDay, units) {
+  hourlyForecast(forecast, hours, units) {
     while(this.forecastSection.firstChild) {
       this.forecastSection.removeChild(this.forecastSection.firstChild);
     }
 
-    for (let i = 0; i < allHours.length; i++) {
+    for (let i = 0; i < hours.length; i++) {
       const hourlyCard = this.createElement('div', 'hourly-card');
 
-      const icon = this.getIcon(allHours[i].iconText, isDay);
+      const icon = this.getIcon(hours[i].iconText, forecast.current.is_day);
       
       const dayName = this.createElement('h3');
-      dayName.textContent = allHours[i].hour; 
+      dayName.textContent = hours[i].hour; 
 
       const weatherIcon = this.createElement('span');
       weatherIcon.classList.add(icon);
 
       const temp = this.createElement('h3');
       if (units) {
-        temp.textContent = `${allHours[i].temp_f} ℉`;
+        temp.textContent = `${hours[i].temp_f} ℉`;
       } else {
-        temp.textContent = `${allHours[i].temp_c} ℃`;
+        temp.textContent = `${hours[i].temp_c} ℃`;
       }
 
       hourlyCard.append(dayName, weatherIcon, temp);
@@ -259,6 +259,7 @@ export class View {
     }
   }
 
+  // Include night time
   getIcon(text, isDay) {
     let icon;
 
@@ -302,6 +303,7 @@ export class View {
     return icon;
   }
 
+  // Doesn't include night time
   getFutureIcons(text) {
     let icon;
 
@@ -367,8 +369,8 @@ export class View {
     });
   }
 
-  handleDisplayedColors(weather, isDay, isHourly) {
-    const text = this.getIcon(weather, isDay);
+  handleDisplayedColors(forecast, isHourly) {
+    const text = this.getIcon(forecast.current.condition.text, forecast.current.is_day);
 
     this.title.style.color = this.coldBackground;
     this.inputLabel.style.color = this.coldBackground;
@@ -418,8 +420,8 @@ export class View {
     }
   }
 
-  btnColors(weather, isDay, clickedBtn, notClickedBtn) {
-    const text = this.getIcon(weather, isDay);
+  btnColors(forecast, clickedBtn, notClickedBtn) {
+    const text = this.getIcon(forecast.current.condition.text, forecast.current.is_day);
 
     if (clickedBtn === 'hourly') {
       clickedBtn = this.hourlyBtn;
@@ -450,8 +452,8 @@ export class View {
     }
   }
 
-  toggleBtnColor(weather, isDay) {
-    const text = this.getIcon(weather, isDay);
+  toggleBtnColor(forecast) {
+    const text = this.getIcon(forecast.current.condition.text, forecast.current.is_day);
 
     if (text === 'sunny') {
       this.toggleInput.style.setProperty('--toggle-background', this.sunnyPlate);
