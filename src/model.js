@@ -150,6 +150,7 @@ export class Model {
 
   async defaultLocation() {
     try {
+      // Free Weather API forecast only 3 days in advance, but I left 7 if they change it in future :)
       const forecast = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}&days=7`, { mode: 'cors'});
       const astronomy = await fetch(`https://api.weatherapi.com/v1/astronomy.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}`, { mode: 'cors'});
       const dataForecast = await forecast.json();

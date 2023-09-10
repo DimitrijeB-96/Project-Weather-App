@@ -51,13 +51,16 @@ export class View {
     this.input.type = 'text';
     this.input.placeholder = '';
 
+    this.hourlyBtn = this.createElement('button', 'hourly-btn');
+    this.hourlyBtn.type = 'button';
+    this.hourlyBtn.textContent = 'Hourly'
+
     this.dailyBtn = this.createElement('button', 'daily-btn');
     this.dailyBtn.type = 'button';
     this.dailyBtn.textContent = 'Daily'
 
-    this.hourlyBtn = this.createElement('button', 'hourly-btn');
-    this.hourlyBtn.type = 'button';
-    this.hourlyBtn.textContent = 'Hourly'
+    this.dailyNote = this.createElement('h2', 'daily-note');
+    this.dailyNote.textContent = 'NOTE: Free Weather API can display only 3 days Forecast in advance.';
 
     this.toggleSection.append(this.title, this.toggleInput);
     this.searchSection.append(this.input, this.inputLabel);
@@ -221,13 +224,12 @@ export class View {
         minTemp.textContent = `${forecastdays[i].day.mintemp_f} ℉`;
       } else {
         minTemp.textContent = `${forecastdays[i].day.mintemp_c} ℃`;
-      }
-      
+      }     
 
       dailyCard.append(dayName, weatherIcon, maxTemp, minTemp);
 
       this.forecastSection.append(dailyCard);
-    }  
+    }
   }
 
   hourlyForecast(forecast, hours, units) {
@@ -362,8 +364,12 @@ export class View {
   handleChangeDailyInfo(handler) {
     this.selectForecastSection.addEventListener('click', (e) => {
       if (e.target.className === 'daily-btn') {
+        this.selectForecastSection.append(this.dailyNote);
         handler('daily');
       } else if (e.target.className === 'hourly-btn') {
+        if (this.dailyNote) {
+          this.selectForecastSection.removeChild(this.dailyNote);
+        }
         handler('hourly');
       }
     });
@@ -375,6 +381,7 @@ export class View {
     this.title.style.color = this.coldBackground;
     this.inputLabel.style.color = this.coldBackground;
     this.input.style.color = this.coldBackground;
+    this.dailyNote.style.color = this.coldBackground;
     
     if (text === 'sunny') {
       this.getColors(this.sunnyBackground, this.sunnyPlate, this.sunnyShadow, isHourly);
@@ -393,6 +400,7 @@ export class View {
       this.title.style.color = this.coldPlate;
       this.inputLabel.style.color = this.coldPlate;
       this.input.style.color = this.coldShadow;
+      this.dailyNote.style.color = this.coldShadow;
     }
   }
 
@@ -438,8 +446,9 @@ export class View {
       clickedBtn.style.backgroundColor = this.coldPlate;
       notClickedBtn.style.backgroundColor = this.cloudyShadow;
     } else if (text === 'cloudy-night' || text === 'night') {
-      clickedBtn.style.backgroundColor = this.nightPlate;
-      notClickedBtn.style.backgroundColor = this.nightShadow;
+      clickedBtn.style.backgroundColor = this.coldPlate;
+      notClickedBtn.style.backgroundColor = this.cloudyShadow;
+
     } else if (text === 'rainy' || text === 'rain-heavy' || text === 'drizzle' || text === 'overcast') {
       clickedBtn.style.backgroundColor = this.cloudyPlate;
       notClickedBtn.style.backgroundColor = this.cloudyShadow;
