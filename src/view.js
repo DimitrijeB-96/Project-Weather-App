@@ -36,6 +36,8 @@ export class View {
     this.selectForecastSection = this.createElement('div', 'select-forecast-section');
     this.forecastSection = this.createElement('div', 'forecast-section');
 
+    this.titleAndDateDiv = this.createElement('div', 'title-day');
+
     this.title = this.createElement('h1', 'title');
     this.title.textContent = 'Weather APP';
 
@@ -62,7 +64,8 @@ export class View {
     this.dailyNote = this.createElement('h2', 'daily-note');
     this.dailyNote.textContent = 'NOTE: Free Weather API can display only 3 days Forecast in advance.';
 
-    this.toggleSection.append(this.title, this.toggleInput);
+    this.titleAndDateDiv.append(this.title);
+    this.toggleSection.append(this.titleAndDateDiv, this.toggleInput);
     this.searchSection.append(this.input, this.inputLabel);
 
     this.centralSection.append(this.toggleSection, this.searchSection, this.advanceSection);
@@ -85,7 +88,21 @@ export class View {
     return element;
   }
 
-  todayWeatherCard(forecast, city, units) {
+  displayTodayDateAndDay(days, date) {
+    const div = this.createElement('div');
+
+    while (div.firstChild) {
+      div.firstChild.removeChild(div.firstChild);
+    }
+
+    const dayAndDate = this.createElement('h1', 'date-time');
+    dayAndDate.textContent = `${days[0]} - ${date}`;
+
+    div.append(dayAndDate);
+    this.titleAndDateDiv.append(div);
+  }
+
+  todayWeatherCard(forecast, city, currentTime, units) {
     while (this.leftSection.firstChild) {
       this.leftSection.removeChild(this.leftSection.firstChild);
     }
@@ -113,10 +130,10 @@ export class View {
     const weatherText = this.createElement('p', 'weather-text');
     weatherText.textContent = forecast.current.condition.text;
 
-    const dateAndTime = this.createElement('p', 'date-time');
-    dateAndTime.textContent = forecast.current.last_updated;
+    const time = this.createElement('p', 'current-time');
+    time.textContent = currentTime;
     
-    div.append(cityName, countryName, temperature, weatherIcon, weatherText, dateAndTime);
+    div.append(cityName, countryName, temperature, weatherIcon, weatherText, time);
     this.leftSection.append(div);
   }
 
@@ -377,7 +394,11 @@ export class View {
 
   handleDisplayedColors(forecast, isHourly) {
     const text = this.getIcon(forecast.current.condition.text, forecast.current.is_day);
+    
+    const dateAndDay = document.querySelector('.date-time');
+    dateAndDay.style.color = this.coldBackground;
 
+    // --cold-background and --font-color use same hex color.
     this.title.style.color = this.coldBackground;
     this.inputLabel.style.color = this.coldBackground;
     this.input.style.color = this.coldBackground;
@@ -401,6 +422,7 @@ export class View {
       this.inputLabel.style.color = this.coldPlate;
       this.input.style.color = this.coldShadow;
       this.dailyNote.style.color = this.coldShadow;
+      dateAndDay.style.color = this.coldShadow;
     }
   }
 

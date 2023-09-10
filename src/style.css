@@ -188,24 +188,27 @@ p, label {
 .today-card h2:last-of-type {
   align-self: center;
   font-size: 5em;
+  margin-top: 0.5em;
 }
 
 .today-card span {
   align-self: center;
-  height: 160px;
-  width: 160px;
-  margin-bottom: 4.5em;
+  height: 150px;
+  width: 150px;
+  margin-bottom: 6em;
+  margin-top: 1em;
 }
 
 .today-card p {
   align-self: flex-end;
   margin-bottom: 0.5em;
-  font-size: 1.4em;
+  font-size: 1.6em;
+  font-weight: 700;
 }
 
 .today-card p:last-of-type {
   align-self: flex-end;
-  font-size: 1.8em;
+  font-size: 2em;
 }
 
 .central-section {

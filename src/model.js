@@ -148,6 +148,26 @@ export class Model {
     return result;
   }
 
+  formatTodaysDate(forecast) {
+    let date = forecast.location.localtime;
+    
+    date = date.split(' ');
+
+    const todayDate = date[0].replaceAll('-', '.');
+
+    return todayDate;
+  }
+
+  currentTime(forecast) {
+    let dateAndTime = forecast.location.localtime;
+
+    dateAndTime = dateAndTime.split(' ');
+
+    const time = dateAndTime[1];
+
+    return time;
+  }
+
   async defaultLocation() {
     try {
       // Free Weather API forecast only 3 days in advance, but I left 7 if they change it in future :)
