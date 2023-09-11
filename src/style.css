@@ -416,28 +416,28 @@ p, label {
   align-items: center;
   justify-content: space-evenly;
 
-  height: 90%;
+  height: 100%;
   width: 12%;
   
   padding: 5px;
 }
 
 .daily-card h3 {
-  font-size: 2em;
+  font-size: 1.8em;
 }
 
 .daily-card span{
-  height: 65px;
-  width: 65px;
+  height: 60px;
+  width: 60px;
 }
 
 .daily-card h3:last-of-type {
-  font-size: 1.6em;
+  font-size: 1.4em;
   margin-bottom: 0;
 }
 
 .daily-card p {
-  font-size: 1.5em;
+  font-size: 1.2em;
   margin-top: -1em;
 }
 
