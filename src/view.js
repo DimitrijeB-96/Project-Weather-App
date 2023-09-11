@@ -3,6 +3,8 @@ export class View {
     this.root = document.querySelector(':root');
     this.rootStyles = getComputedStyle(this.root);
 
+    this.invalidColor = this.rootStyles.getPropertyValue('--invalid-color');
+
     this.sunnyBackground = this.rootStyles.getPropertyValue('--sunny-background');
     this.sunnyPlate = this.rootStyles.getPropertyValue('--sunny-plate');
     this.sunnyShadow = this.rootStyles.getPropertyValue('--sunny-shadow');
@@ -53,6 +55,9 @@ export class View {
     this.input.type = 'text';
     this.input.placeholder = '';
 
+    this.inputErrorDisplay = this.createElement('p', 'error-input');
+    this.inputErrorDisplay.style.display = 'none';
+
     this.hourlyBtn = this.createElement('button', 'hourly-btn');
     this.hourlyBtn.type = 'button';
     this.hourlyBtn.textContent = 'Hourly'
@@ -66,7 +71,7 @@ export class View {
 
     this.titleAndDateDiv.append(this.title);
     this.toggleSection.append(this.titleAndDateDiv, this.toggleInput);
-    this.searchSection.append(this.input, this.inputLabel);
+    this.searchSection.append(this.input, this.inputLabel, this.inputErrorDisplay);
 
     this.centralSection.append(this.toggleSection, this.searchSection, this.advanceSection);
 
@@ -103,6 +108,9 @@ export class View {
     while (this.leftSection.firstChild) {
       this.leftSection.removeChild(this.leftSection.firstChild);
     }
+
+    this.inputErrorDisplay.style.display = 'none';
+    this.inputLabel.style.color = this.coldBackground;
 
     const icon = this.getIcon(forecast.current.condition.text, forecast.current.is_day);
     
@@ -198,7 +206,7 @@ export class View {
     windText.textContent = 'WIND';
     const windValue = this.createElement('p');
     if (units) {
-      windValue.textContent = `${forecast.current.mph} mp/h`;
+      windValue.textContent = `${forecast.current.wind_mph} mp/h`;
     } else {
       windValue.textContent = `${forecast.current.wind_kph} km/h`;
     }
@@ -507,9 +515,32 @@ export class View {
     }
   }
 
-  pageWhenError() {
+  handleInvalidLocationInput(errorCode) {
+    this.inputErrorDisplay.style.display = 'inline';
+
+    this.input.style.borderColor = this.invalidColor;
+    this.inputLabel.style.color = this.invalidColor;
+
+    if (errorCode === 1003) {
+      this.inputErrorDisplay.textContent = `Please enter location.`;
+    } else if (errorCode === 1006) {
+      this.inputErrorDisplay.textContent = `This location doesn't exist in our database!`;
+    }
+  }
+
+  pageWhenError(text, status, errorCode) {
     while(document.body.firstChild) {
       document.body.removeChild(document.body.firstChild);
     }
+    const div = this.createElement('div');
+
+    const displayErrorTitle = this.createElement('h1', 'error-title');
+    displayErrorTitle.textContent = text;
+
+    const displayCodes = this.createElement('h2', 'error-codes');
+    displayCodes.textContent = `HTTP Status Code ${status}, Error Code ${errorCode}`;
+
+    div.append(displayErrorTitle, displayCodes);
+    document.body.append(div);
   }
 }

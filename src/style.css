@@ -6,8 +6,9 @@
   --toggle-circle: ;
 
   --font-color: #f1f5f9;
+  --invalid-color: #ef4444;
 
-  --sunny-background: #38bdf8;
+  --sunny-background: #0ea5e9;
   --sunny-plate: #0284c7;
   --sunny-shadow: #0c4a6e;
 
@@ -313,6 +314,7 @@ p, label {
   position: absolute;
 
   font-size: 2.1em;
+  font-weight: 700;
   text-align: center;
 
   width: 3.4em;
@@ -325,6 +327,7 @@ p, label {
 }
 
 #search-input {
+  position: relative;
   height: 1.8em;
   width: 34%;
 
@@ -346,6 +349,18 @@ p, label {
   transform: translateY(-1.4em);
 
   font-size: 1.5em;
+}
+
+.error-input {
+  position: absolute;
+
+  left: 34%;
+  top: 5em;
+
+  color: var(--invalid-color);
+  font-size: 1.4em;
+  font-weight: 700;
+
 }
 
 .advance-section {
@@ -459,4 +474,12 @@ p, label {
 
   right: 0;
   padding-right: 4%;
+}
+
+.error-title {
+  color: var(--cloudy-shadow);
+}
+
+.error-codes {
+  color: var(--cloudy-plate);
 }

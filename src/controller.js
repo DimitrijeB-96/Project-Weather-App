@@ -13,13 +13,34 @@ export class Controller {
     this.view.displayTodayDateAndDay(days, formatedDate);  
   }
 
+  handleError = (status, errorCode) => { 
+    let message = '';
+    console.log(status);
+    if (status === 400) {
+      if (errorCode === 1005) {
+        message = 'Invalid WeatherAPI URL :(.';
+      } 
+    } else if (status === 401) {
+      if (errorCode === 2006) {
+        message = 'API Key provided is invalid.';
+      } 
+    } else if (status === 403) {
+      if (errorCode === 2007) {
+        message = "Exceeded calls per month, please try again later.";
+      } else if (errorCode === 2008) {
+        message = "Disabled API KEY.";
+      } 
+    }
+    this.view.pageWhenError(message, status, errorCode);
+  }
+
   handleCityDefault = async () => {
     try {
-      const [dataForecast, dataAstronomy, status] = await this.model.defaultLocation();
+      const [dataForecast, dataAstronomy, status, errorCode] = await this.model.defaultLocation();
       let displayUnits = this.model.getUnits();
       let currentCity = this.model.getCityName();
       let isHourly = this.model.getInfo();
-  
+
       if (dataForecast && dataForecast && status === 200) {
         const forecastdays = dataForecast.forecast.forecastday;
   
@@ -28,32 +49,35 @@ export class Controller {
         const days = this.model.getDayName(forecastdays);
         const hours = this.model.getHours(forecastdays, dataForecast.current);
 
-        if (currentCity === dataForecast.location.name) {
-          this.handleTodayDate(days, formatedDate);
-          this.view.todayWeatherCard(dataForecast, currentCity, currentTime, displayUnits);
-          this.view.todayAdvanceInfo(dataAstronomy, dataForecast, displayUnits);
-          this.view.handleDisplayedColors(dataForecast, isHourly);
-          this.view.toggleBtnColor(dataForecast);
-
-          if (isHourly) {
-            this.view.hourlyForecast(dataForecast, hours, displayUnits);
-          } else {
-            this.view.dailyForecast(forecastdays, days, displayUnits);
-          }
+        if (isHourly) {
+          this.view.hourlyForecast(dataForecast, hours, displayUnits);
+        } else {
+          this.view.dailyForecast(forecastdays, days, displayUnits);
         }
+        this.handleTodayDate(days, formatedDate);
+        this.view.todayWeatherCard(dataForecast, currentCity, currentTime, displayUnits);
+        this.view.todayAdvanceInfo(dataAstronomy, dataForecast, displayUnits);
+        this.view.handleDisplayedColors(dataForecast, isHourly);
+        this.view.toggleBtnColor(dataForecast);
+      } else if (status === 401 || status === 403) {
+        this.handleError(status, errorCode);
       }
-    } catch {}
+    } catch (error) {
+      alert(error);
+    }
   }
 
   handleCityInput = async (search) => {
     try {
-      const [dataForecast, dataAstronomy] = await this.model.getLocation(search);
+      const [dataForecast, dataAstronomy, status, errorCode] = await this.model.getLocation(search);
       let displayUnits = this.model.getUnits();
       let isHourly = this.model.getInfo();
 
+      console.log(status);
+      console.log(errorCode);
       console.log(dataForecast);
 
-      if (dataForecast && dataForecast) {
+      if (dataForecast && dataForecast && status === 200 && errorCode === 1) {
         const forecastdays = dataForecast.forecast.forecastday;
 
         const currentTime = this.model.currentTime(dataForecast);
@@ -61,19 +85,26 @@ export class Controller {
         const hours = this.model.getHours(forecastdays, dataForecast.current);
         const days = this.model.getDayName(forecastdays);
 
-        this.handleTodayDate(days, formatedDate);
-        this.view.todayWeatherCard(dataForecast, dataForecast.location.name, currentTime, displayUnits);
-        this.view.todayAdvanceInfo(dataAstronomy, dataForecast, displayUnits);
-        this.view.handleDisplayedColors(dataForecast, isHourly);
-        this.view.toggleBtnColor(dataForecast);
-
         if (isHourly) {
           this.view.hourlyForecast(dataForecast, hours, displayUnits);
         } else {
           this.view.dailyForecast(forecastdays, days, displayUnits);
         }
+        this.handleTodayDate(days, formatedDate);
+        this.view.todayWeatherCard(dataForecast, dataForecast.location.name, currentTime, displayUnits);
+        this.view.todayAdvanceInfo(dataAstronomy, dataForecast, displayUnits);
+        this.view.handleDisplayedColors(dataForecast, isHourly);
+        this.view.toggleBtnColor(dataForecast);
+      } else if (status === 401 || status === 403) {
+        this.handleError(status, errorCode);
+      } else if (status === 400) {
+        if (errorCode === 1003 || errorCode === 1006) {
+          this.view.handleInvalidLocationInput(errorCode);
+        }
       }
-    } catch {}
+    } catch (error) {
+      alert(error);
+    }
   }
 
   handleUnitsChange = (input) => {
@@ -84,15 +115,18 @@ export class Controller {
     if (currentUnits !== input) {
       this.model.changeUnits();
     }
+    // On bug stayed unsolved here, if you input city that doesn't exist but Weather API find some place and display it with different name
+    // when you change units it display location name because that input is saved and used to be displayed
     this.handleCityDefault();
   }
 
   handleInfoChange = async (btn) => {
-    const [dataForecast, dataAstronomy] = await this.model.defaultLocation();
+    const [dataForecast, dataAstronomy, status, errorCode] = await this.model.defaultLocation();
     let displayUnits = this.model.getUnits();
     let isHourly = this.model.getInfo();
 
-    if (dataForecast && dataForecast) {
+    console.log(dataForecast);
+    if (dataForecast) {
       const forecastdays = dataForecast.forecast.forecastday;
 
       const days = this.model.getDayName(forecastdays);

@@ -180,9 +180,6 @@ export class Model {
       if (this.responseStatus !== 200) {
         this.responseError = dataForecast.error.code;
       }
-    
-      console.log(this.responseStatus);
-      console.log(this.responseError);
 
       return Promise.all([dataForecast, dataAstronomy, this.responseStatus, this.responseError]);
     } catch (error) {
@@ -197,9 +194,15 @@ export class Model {
       const dataForecast = await forecast.json();
       const dataAstronomy = await astronomy.json();
 
-      this.changeCityName(location);
+      this.responseStatus = forecast.status;
+      if (this.responseStatus === 200) {
+        this.changeCityName(location);
+        this.responseError = 1;
+      } else {
+        this.responseError = dataForecast.error.code;
+      }
       
-      return Promise.all([dataForecast, dataAstronomy]);
+      return Promise.all([dataForecast, dataAstronomy, this.responseStatus, this.responseError]);
     } catch (error) {
       return error;
     }
