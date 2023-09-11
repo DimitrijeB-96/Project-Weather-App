@@ -124,9 +124,9 @@ export class View {
 
     const temperature = this.createElement('h2', 'temperature');
     if (units) {
-      temperature.textContent = `${forecast.current.temp_f} ℉`;
+      temperature.textContent = `${forecast.current.temp_f} °F`;
     } else {
-      temperature.textContent = `${forecast.current.temp_c} ℃`;
+      temperature.textContent = `${forecast.current.temp_c} °C`;
     }
 
     const weatherIcon = this.createElement('span');
@@ -153,18 +153,18 @@ export class View {
     minTempText.textContent = 'MINIMUM';
     const minTempValue = this.createElement('p');
     if (units) {
-      minTempValue.textContent = `${forecast.forecast.forecastday[0].day.mintemp_f} ℉`;
+      minTempValue.textContent = `${forecast.forecast.forecastday[0].day.mintemp_f} °F`;
     } else {
-      minTempValue.textContent = `${forecast.forecast.forecastday[0].day.mintemp_c} ℃`;
+      minTempValue.textContent = `${forecast.forecast.forecastday[0].day.mintemp_c} °C`;
     }
 
     const maxTempText = this.createElement('h3');
     maxTempText.textContent = 'MAXIMUM';
     const maxTempValue = this.createElement('p');
     if (units) {
-      maxTempValue.textContent = `${forecast.forecast.forecastday[0].day.maxtemp_f} ℉`;
+      maxTempValue.textContent = `${forecast.forecast.forecastday[0].day.maxtemp_f} °F`;
     } else {
-      maxTempValue.textContent = `${forecast.forecast.forecastday[0].day.maxtemp_c} ℃`;
+      maxTempValue.textContent = `${forecast.forecast.forecastday[0].day.maxtemp_c} °C`;
     }
 
     const sunDiv = this.createElement('div');
@@ -197,9 +197,9 @@ export class View {
     feelsLikeText.textContent = 'FEELS LIKE';
     const feelsLikeValue = this.createElement('p');
     if (units) {
-      feelsLikeValue.textContent = `${forecast.current.feelslike_f} ℉`;
+      feelsLikeValue.textContent = `${forecast.current.feelslike_f} °F`;
     } else {
-      feelsLikeValue.textContent = `${forecast.current.feelslike_c} ℃`;
+      feelsLikeValue.textContent = `${forecast.current.feelslike_c} °C`;
     }
 
     const windText = this.createElement('h2');
@@ -236,16 +236,16 @@ export class View {
 
       const maxTemp = this.createElement('h3');
       if (units) {
-        maxTemp.textContent = `${forecastdays[i].day.maxtemp_f} ℉`;
+        maxTemp.textContent = `${forecastdays[i].day.maxtemp_f} °F`;
       } else {
-        maxTemp.textContent = `${forecastdays[i].day.maxtemp_c} ℃`;
+        maxTemp.textContent = `${forecastdays[i].day.maxtemp_c} °C`;
       }
       
       const minTemp = this.createElement('p');
       if (units) {
-        minTemp.textContent = `${forecastdays[i].day.mintemp_f} ℉`;
+        minTemp.textContent = `${forecastdays[i].day.mintemp_f} °F`;
       } else {
-        minTemp.textContent = `${forecastdays[i].day.mintemp_c} ℃`;
+        minTemp.textContent = `${forecastdays[i].day.mintemp_c} °C`;
       }     
 
       dailyCard.append(dayName, weatherIcon, maxTemp, minTemp);
@@ -272,9 +272,9 @@ export class View {
 
       const temp = this.createElement('h3');
       if (units) {
-        temp.textContent = `${hours[i].temp_f} ℉`;
+        temp.textContent = `${hours[i].temp_f} °F`;
       } else {
-        temp.textContent = `${hours[i].temp_c} ℃`;
+        temp.textContent = `${hours[i].temp_c} °C`;
       }
 
       hourlyCard.append(dayName, weatherIcon, temp);

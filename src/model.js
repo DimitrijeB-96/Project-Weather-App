@@ -2,13 +2,11 @@ import { format, getHours } from 'date-fns';
 
 export class Model {
   constructor() {
-    // False represent Celsius, true represent Fahrenheit
-    this.isUnits = false;
+    this.isUnits = false; // False represent Celsius, true represent Fahrenheit
     this.isHourly = true;
-    this.currentCityName = 'Novi Sad'; // Default location is my city <3 :)
+    this.currentCityName = 'Novi Sad'; // Default location is my city <3 :) 
     this.responseStatus;
-    // This is just placeholder for default and code to use when there status is 200
-    this.responseError = 1;
+    this.responseError = 1; // This is just placeholder for default and code to use when there status is 200
   }
 
   changeUnits() {

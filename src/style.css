@@ -283,16 +283,16 @@ p, label {
   left: 40px;
 }
 
-/* ℃ ℉ */
+/* °C °F */
 .input-toggle::after {
   position: absolute;
 
   width: 100px;
-  content: '℃ ℉';
+  content: '°C °F';
   color: var(--font-color);
 
   font-size: 2em;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
   
   left: 2px;
   top: 5px;
@@ -423,8 +423,8 @@ p, label {
 }
 
 .daily-card span{
-  height: 85px;
-  width: 85px;
+  height: 70px;
+  width: 70px;
 }
 
 .daily-card h3:last-of-type {

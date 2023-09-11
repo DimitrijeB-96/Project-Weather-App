@@ -15,7 +15,7 @@ export class Controller {
 
   handleError = (status, errorCode) => { 
     let message = '';
-    console.log(status);
+
     if (status === 400) {
       if (errorCode === 1005) {
         message = 'Invalid WeatherAPI URL :(.';
@@ -73,10 +73,6 @@ export class Controller {
       let displayUnits = this.model.getUnits();
       let isHourly = this.model.getInfo();
 
-      console.log(status);
-      console.log(errorCode);
-      console.log(dataForecast);
-
       if (dataForecast && dataForecast && status === 200 && errorCode === 1) {
         const forecastdays = dataForecast.forecast.forecastday;
 
@@ -125,7 +121,6 @@ export class Controller {
     let displayUnits = this.model.getUnits();
     let isHourly = this.model.getInfo();
 
-    console.log(dataForecast);
     if (dataForecast) {
       const forecastdays = dataForecast.forecast.forecastday;
 
