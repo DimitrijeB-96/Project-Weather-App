@@ -180,7 +180,7 @@ export class Model {
 
       return Promise.all([dataForecast, dataAstronomy, this.responseStatus, this.responseError]);
     } catch (error) {
-      throw error;
+      alert(error);
     }
   }
 
@@ -201,7 +201,7 @@ export class Model {
       
       return Promise.all([dataForecast, dataAstronomy, this.responseStatus, this.responseError]);
     } catch (error) {
-      return error;
+      alert(error);
     }
   }
 }
