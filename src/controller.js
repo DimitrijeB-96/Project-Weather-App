@@ -3,48 +3,33 @@ export class Controller {
     this.model = model;
     this.view = view;
 
-    this.handleTodayDate();
     this.handleCityDefault();
     this.view.handleInput(this.handleCityInput);
     this.view.handleToggle(this.handleUnitsChange);
     this.view.handleChangeDailyInfo(this.handleInfoChange);
   }
 
-  handleTodayDate = async () => {
-    try {
-      const [dataForecast, dataAstronomy] = await this.model.defaultLocation();
-
-      if (dataForecast && dataAstronomy) {
-        const forecastdays = dataForecast.forecast.forecastday;
-
-        const formatedDate = this.model.formatTodaysDate(dataForecast);
-        const days = this.model.getDayName(forecastdays);
-
-        this.view.displayTodayDateAndDay(days, formatedDate);
-      }
-    } catch(error) {
-
-    }
+  handleTodayDate = async (days, formatedDate) => {
+    this.view.displayTodayDateAndDay(days, formatedDate);  
   }
 
   handleCityDefault = async () => {
     try {
-      const [dataForecast, dataAstronomy] = await this.model.defaultLocation();
+      const [dataForecast, dataAstronomy, status] = await this.model.defaultLocation();
       let displayUnits = this.model.getUnits();
       let currentCity = this.model.getCityName();
       let isHourly = this.model.getInfo();
-
-      console.log(dataForecast);
-      console.log(dataAstronomy);
   
-      if (dataForecast && dataForecast) {
+      if (dataForecast && dataForecast && status === 200) {
         const forecastdays = dataForecast.forecast.forecastday;
   
         const currentTime = this.model.currentTime(dataForecast);
+        const formatedDate = this.model.formatTodaysDate(dataForecast);
         const days = this.model.getDayName(forecastdays);
         const hours = this.model.getHours(forecastdays, dataForecast.current);
-  
+
         if (currentCity === dataForecast.location.name) {
+          this.handleTodayDate(days, formatedDate);
           this.view.todayWeatherCard(dataForecast, currentCity, currentTime, displayUnits);
           this.view.todayAdvanceInfo(dataAstronomy, dataForecast, displayUnits);
           this.view.handleDisplayedColors(dataForecast, isHourly);
@@ -57,10 +42,7 @@ export class Controller {
           }
         }
       }
-    } catch(error) {
-      // NOT IMPLEMENTED YET
-      console.log('handleCityDefault', error);
-    }
+    } catch {}
   }
 
   handleCityInput = async (search) => {
@@ -68,6 +50,8 @@ export class Controller {
       const [dataForecast, dataAstronomy] = await this.model.getLocation(search);
       let displayUnits = this.model.getUnits();
       let isHourly = this.model.getInfo();
+
+      console.log(dataForecast);
 
       if (dataForecast && dataForecast) {
         const forecastdays = dataForecast.forecast.forecastday;
@@ -77,7 +61,7 @@ export class Controller {
         const hours = this.model.getHours(forecastdays, dataForecast.current);
         const days = this.model.getDayName(forecastdays);
 
-        this.view.handleTodayDate(days, formatedDate);
+        this.handleTodayDate(days, formatedDate);
         this.view.todayWeatherCard(dataForecast, dataForecast.location.name, currentTime, displayUnits);
         this.view.todayAdvanceInfo(dataAstronomy, dataForecast, displayUnits);
         this.view.handleDisplayedColors(dataForecast, isHourly);
@@ -89,10 +73,7 @@ export class Controller {
           this.view.dailyForecast(forecastdays, days, displayUnits);
         }
       }
-    } catch (error) {
-      // NOT IMPLEMENTED YET
-      this.handleCityDefault();
-    }
+    } catch {}
   }
 
   handleUnitsChange = (input) => {

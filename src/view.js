@@ -89,17 +89,14 @@ export class View {
   }
 
   displayTodayDateAndDay(days, date) {
-    const div = this.createElement('div');
-
-    while (div.firstChild) {
-      div.firstChild.removeChild(div.firstChild);
+    if (this.titleAndDateDiv.contains(document.querySelector('.date-time'))) {
+      this.titleAndDateDiv.removeChild(document.querySelector('.date-time'));
     }
 
     const dayAndDate = this.createElement('h1', 'date-time');
     dayAndDate.textContent = `${days[0]} - ${date}`;
 
-    div.append(dayAndDate);
-    this.titleAndDateDiv.append(div);
+    this.titleAndDateDiv.append(dayAndDate);
   }
 
   todayWeatherCard(forecast, city, currentTime, units) {
@@ -290,7 +287,7 @@ export class View {
       icon = 'partly-cloudy';
     } else if (text === 'Partly cloudy' && isDay === 0) {
       icon = 'cloudy-night';
-    } else if (text === 'Overcast' || text === 'Cloudy') {
+    } else if (text === 'Cloudy' || text === 'Overcast') {
       icon = 'overcast';
     } else if (text === 'Mist' || text === 'Fog' || text === 'Freezing fog') {
       icon = 'foggy';
@@ -302,9 +299,9 @@ export class View {
       icon = 'rain-heavy';
     } else if (text === 'Patchy light drizzle' || text === 'Light drizzle') {
       icon = 'drizzle';
-    } else if (text === 'Patchy sleet possible' || text === 'Light sleet' || text === 'Light sleet showers' ||text === 'Light showers of ice pellets') {
+    } else if (text === 'Patchy sleet possible' || text === 'Light sleet' || text === 'Light sleet showers' || text === 'Light showers of ice pellets') {
       icon = 'sleet';
-    } else if (text === text === 'Moderate or heavy sleet' || text === 'Moderate or heavy sleet showers' || text === 'Ice pellets' || 
+    } else if (text === 'Moderate or heavy sleet' || text === 'Moderate or heavy sleet showers' || text === 'Ice pellets' || 
       text === 'Moderate or heavy showers of ice pellets') {
       icon = 'hail';
     } else if (text === 'Patchy freezing drizzle possible' || text === 'Freezing drizzle' || text === 'Heavy freezing drizzle' || text === 'Heavy snow') {
@@ -342,9 +339,9 @@ export class View {
       icon = 'rain-heavy';
     } else if (text === 'Patchy light drizzle' || text === 'Light drizzle') {
       icon = 'drizzle';
-    } else if (text === 'Patchy sleet possible' || text === 'Light sleet' || text === 'Light sleet showers' ||text === 'Light showers of ice pellets') {
+    } else if (text === 'Patchy sleet possible' || text === 'Light sleet' || text === 'Light sleet showers' || text === 'Light showers of ice pellets') {
       icon = 'sleet';
-    } else if (text === text === 'Moderate or heavy sleet' || text === 'Moderate or heavy sleet showers' || text === 'Ice pellets' || 
+    } else if (text === 'Moderate or heavy sleet' || text === 'Moderate or heavy sleet showers' || text === 'Ice pellets' || 
       text === 'Moderate or heavy showers of ice pellets') {
       icon = 'hail';
     } else if (text === 'Patchy freezing drizzle possible' || text === 'Freezing drizzle' || text === 'Heavy freezing drizzle' || text === 'Heavy snow') {
@@ -507,6 +504,12 @@ export class View {
     } else if (text === 'snow' || text === 'freezing' || text === 'hail' || text === 'sleet' || text === 'foggy') {
       this.toggleInput.style.setProperty('--toggle-background', this.coldPlate);
       this.toggleInput.style.setProperty('--toggle-circle', this.coldShadow);
+    }
+  }
+
+  pageWhenError() {
+    while(document.body.firstChild) {
+      document.body.removeChild(document.body.firstChild);
     }
   }
 }

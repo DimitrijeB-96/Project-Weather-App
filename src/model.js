@@ -1,7 +1,3 @@
-//apiKey = "757ce984dbc947619fd83911232708"
-
-// https://api.weatherapi.com/v1/current.json?key=757ce984dbc947619fd83911232708&q=${location}
-
 import { format, getHours } from 'date-fns';
 
 export class Model {
@@ -9,7 +5,10 @@ export class Model {
     // False represent Celsius, true represent Fahrenheit
     this.isUnits = false;
     this.isHourly = true;
-    this.currentCityName = 'Novi Sad';
+    this.currentCityName = 'Novi Sad'; // Default location is my city town <3 :)
+    this.responseStatus;
+    // This is just placeholder for default and code to use when there status is 200
+    this.responseError = 1;
   }
 
   changeUnits() {
@@ -171,14 +170,23 @@ export class Model {
   async defaultLocation() {
     try {
       // Free Weather API forecast only 3 days in advance, but I left 7 if they change it in future :)
+      // https://api.weatherapi.com/v1/forecast.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}&days=7
       const forecast = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}&days=7`, { mode: 'cors'});
       const astronomy = await fetch(`https://api.weatherapi.com/v1/astronomy.json?key=757ce984dbc947619fd83911232708&q=${this.currentCityName}`, { mode: 'cors'});
       const dataForecast = await forecast.json();
       const dataAstronomy = await astronomy.json();
-      
-      return Promise.all([dataForecast, dataAstronomy]);
+
+      this.responseStatus = forecast.status;
+      if (this.responseStatus !== 200) {
+        this.responseError = dataForecast.error.code;
+      }
+    
+      console.log(this.responseStatus);
+      console.log(this.responseError);
+
+      return Promise.all([dataForecast, dataAstronomy, this.responseStatus, this.responseError]);
     } catch (error) {
-      console.log('Error from model defaultLocation', error);
+      throw error;
     }
   }
 
@@ -193,8 +201,7 @@ export class Model {
       
       return Promise.all([dataForecast, dataAstronomy]);
     } catch (error) {
-      console.log('Error from model getLocation', error);
-      throw error;
+      return error;
     }
   }
 }
