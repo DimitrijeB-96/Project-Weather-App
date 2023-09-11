@@ -422,17 +422,23 @@ p, label {
   padding: 5px;
 }
 
+.daily-card h3 {
+  font-size: 2em;
+}
+
 .daily-card span{
-  height: 70px;
-  width: 70px;
+  height: 65px;
+  width: 65px;
 }
 
 .daily-card h3:last-of-type {
-  font-size: 2em;
+  font-size: 1.6em;
+  margin-bottom: 0;
 }
 
 .daily-card p {
   font-size: 1.5em;
+  margin-top: -1em;
 }
 
 .hourly-card {
