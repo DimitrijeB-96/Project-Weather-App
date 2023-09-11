@@ -423,7 +423,7 @@ p, label {
 }
 
 .daily-card h3 {
-  font-size: 1.8em;
+  font-size: 1.6em;
 }
 
 .daily-card span{
@@ -438,7 +438,6 @@ p, label {
 
 .daily-card p {
   font-size: 1.2em;
-  margin-top: -1em;
 }
 
 .hourly-card {
