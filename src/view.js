@@ -115,6 +115,10 @@ export class View {
     const icon = this.getIcon(forecast.current.condition.text, forecast.current.is_day);
     
     const div = this.createElement('div', 'today-card');
+
+    const cityCountryDiv = this.createElement('div', 'city-country-div');
+    const tempIconDiv = this.createElement('div', 'temp-icon-div');
+    const weatherTimeDiv = this.createElement('div', 'weather-time-div');
     
     const cityName = this.createElement('h2', 'city-name');
     cityName.textContent = city;
@@ -137,8 +141,12 @@ export class View {
 
     const time = this.createElement('p', 'current-time');
     time.textContent = currentTime;
+
+    cityCountryDiv.append(cityName, countryName);
+    tempIconDiv.append(temperature, weatherIcon);
+    weatherTimeDiv.append(weatherText, time);
     
-    div.append(cityName, countryName, temperature, weatherIcon, weatherText, time);
+    div.append(cityCountryDiv, tempIconDiv, weatherTimeDiv);
     this.leftSection.append(div);
   }
 
@@ -315,7 +323,7 @@ export class View {
     } else if (text === 'Patchy freezing drizzle possible' || text === 'Freezing drizzle' || text === 'Heavy freezing drizzle' || text === 'Heavy snow') {
       icon = 'freezing';
     } else if (text === 'Patchy snow possible' || text === 'Blowing snow' || text === 'Blizzard' || text === 'Patchy light snow' ||
-      text === 'Light snow' || text === 'Patchy moderate snow' || text === 'Light snow showers' || text === 'Moderate or heavy snow showers') {
+      text === 'Light snow' || text === 'Moderate snow' || text === 'Patchy moderate snow' || text === 'Light snow showers' || text === 'Moderate or heavy snow showers') {
       icon = 'snow';
     } else if (text === 'Thundery outbreaks possible') {
       icon = 'thunder';

@@ -73,6 +73,9 @@ export class Controller {
       let displayUnits = this.model.getUnits();
       let isHourly = this.model.getInfo();
 
+      console.log(dataForecast);
+      console.log(dataAstronomy);
+
       if (dataForecast && dataForecast && status === 200 && errorCode === 1) {
         const forecastdays = dataForecast.forecast.forecastday;
 

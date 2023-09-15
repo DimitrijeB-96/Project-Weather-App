@@ -127,7 +127,6 @@ body {
 
   gap: 10px;
   padding: 0px 20px 20px 20px;
-  padding-top: 0;
 }
 
 h1, h2, h3 {
@@ -170,8 +169,9 @@ p, label {
 .today-card {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 
-  height: 95%;
+  height: 90%;
   width: 70%;
 
   padding: 20px 30px;
@@ -179,37 +179,43 @@ p, label {
   border-radius: 20px;
 }
 
-.today-card h2 {
+.city-country-div {
+  display: flex;
+  flex-direction: column;
+}
+
+.city-country-div h2 {
   font-size: 2.8em;
 }
 
-.today-card h3 {
+.city-country-div h3 {
   font-size: 1.6em;
 }
 
-.today-card h2:last-of-type {
-  align-self: center;
-  font-size: 5em;
-  margin-top: 0.5em;
+.temp-icon-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.today-card span {
+.temp-icon-div span {
   align-self: center;
   height: 150px;
   width: 150px;
-  margin-bottom: 6em;
-  margin-top: 1em;
 }
 
-.today-card p {
-  align-self: flex-end;
-  margin-bottom: 0.5em;
-  font-size: 1.6em;
-  font-weight: 700;
+.temp-icon-div h2 {
+  align-self: center;
+  font-size: 4em;
 }
 
-.today-card p:last-of-type {
-  align-self: flex-end;
+.weather-time-div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.weather-time-div p {
   font-size: 2em;
 }
 
@@ -415,9 +421,9 @@ p, label {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
 
-  height: 100%;
+  height: 90%;
   width: 12%;
   
   padding: 5px;
@@ -425,11 +431,13 @@ p, label {
 
 .daily-card h3 {
   font-size: 1.6em;
+  margin-bottom: 1em;
 }
 
-.daily-card span{
-  height: 60px;
-  width: 60px;
+.daily-card span {
+  height: 90px;
+  width: 90px;
+  margin-bottom: 1em;
 }
 
 .daily-card h3:last-of-type {
